@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willwi — 創作歌手與音樂製作人</title>
+<meta name="description" content="Willwi 陳威兒 — 台灣創作歌手與音樂製作人。作品、製作、聲音設計。">
+<meta name="theme-color" content="#0a0a0c">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --fg: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #d4af37;
+    --border: rgba(255,255,255,0.08);
+    --card: #131316;
+    --glow: rgba(212, 175, 55, 0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+    line-height: 1.7;
+    font-weight: 300;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* === GLOBAL PARTICLE CANVAS === */
+  #global-particles {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+  body > *:not(#global-particles):not(script) {
+    position: relative;
+    z-index: 1;
+  }
+  .hero { z-index: 1; }
+  .hero::after { z-index: 0 !important; }
+
+  /* === KEYFRAMES — cooler & smoother === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(50px) scale(0.97); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-80px) rotateY(12deg); }
+    to { opacity: 1; transform: translateX(0) rotateY(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(80px) rotateY(-12deg); }
+    to { opacity: 1; transform: translateX(0) rotateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.8) rotate(-2deg); }
+    to { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.25), 0 0 40px rgba(212,175,55,0.1); }
+    50% { box-shadow: 0 0 35px rgba(212,175,55,0.55), 0 0 70px rgba(212,175,55,0.25); }
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+  @keyframes scroll-hint {
+    0% { transform: translateY(-10px); opacity: 0; }
+    40% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(12px); opacity: 0; }
+  }
+  @keyframes ken-burns {
+    0% { transform: scale(1) translate(0,0); }
+    50% { transform: scale(1.1) translate(-1%, -0.5%); }
+    100% { transform: scale(1.06) translate(1%, 0.5%); }
+  }
+  @keyframes line-draw {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes text-shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+  @keyframes reveal-blur {
+    from { opacity: 0; filter: blur(12px); transform: translateY(40px); }
+    to { opacity: 1; filter: blur(0); transform: translateY(0); }
+  }
+
+  /* === NAV === */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(24px) saturate(1.4);
+    background: rgba(10,10,12,0.72);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    animation: fadeIn 1s ease-out;
+  }
+  .nav .logo {
+    font-family: serif; font-size: 20px; letter-spacing: 0.18em;
+    background: linear-gradient(90deg, var(--accent) 0%, #f4e4a1 40%, #fff 50%, #f4e4a1 60%, var(--accent) 100%);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-shimmer 5s linear infinite;
+  }
+  .nav .links { display: flex; gap: 28px; }
+  .nav .links a {
+    color: var(--muted); text-decoration: none; font-size: 14px;
+    letter-spacing: 0.04em;
+    position: relative;
+    transition: color 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .nav .links a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0;
+    width: 0; height: 1.5px;
+    background: linear-gradient(90deg, var(--accent), #f4e4a1);
+    transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .nav .links a:hover { color: var(--fg); }
+  .nav .links a:hover::after { width: 100%; }
+
+  section {
+    padding: 100px 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* === HERO === */
+  .hero {
+    height: 100vh;
+    min-height: 700px;
+    padding: 0;
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.88) 100%),
+      url('assets/images/willwi-hero-desktop-brand.jpg.jpg') center/cover no-repeat;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 40%, transparent 0%, rgba(0,0,0,0.5) 100%);
+    animation: fadeIn 2s ease-out;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('assets/images/willwi-hero-desktop-brand.jpg.jpg') center/cover no-repeat;
+    animation: ken-burns 28s ease-in-out infinite alternate;
+    z-index: -1;
+  }
+  .hero-content {
+    max-width: 1280px; margin: 0 auto; width: 100%;
+    padding: 0 40px 100px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero .label {
+    font-size: 12px; letter-spacing: 0.35em;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+  }
+  .hero h1 {
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 200;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1.3s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
+  }
+  .hero .subtitle {
+    color: var(--muted); font-size: 18px; max-width: 600px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+  }
+  .hero .cta-row {
+    opacity: 0;
+    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+  }
+  .signature {
+    font-family: "Brush Script MT", "標楷體", cursive;
+    color: var(--accent);
+    font-size: 42px;
+    transform: rotate(-3deg);
+    display: inline-block;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border: 1px solid var(--fg);
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    transition: all 0.45s cubic-bezier(0.16,1,0.3,1);
+    margin-right: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--fg);
+    transform: translateX(-101%);
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    z-index: -1;
+  }
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--bg); }
+  .btn.accent {
+    border-color: var(--accent);
+    color: var(--accent);
+    animation: glow 3.5s ease-in-out infinite;
+  }
+  .btn.accent::before { background: var(--accent); }
+  .btn.accent:hover { color: var(--bg); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    animation: scroll-hint 2.2s ease-in-out infinite;
+    z-index: 2;
+  }
+  .scroll-hint::before {
+    content: '↓';
+    display: block;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  /* === SECTION HEADERS === */
+  .section-head {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .section-head.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section-head .label {
+    font-size: 12px; letter-spacing: 0.3em;
+    color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-head .label::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1.5px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .section-head h2 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 200; letter-spacing: 0.02em;
+  }
+
+  /* === ABOUT === */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-img-wrap {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-70px) rotateY(8deg);
+    transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1);
+    border-radius: 4px;
+  }
+  .about-img-wrap.visible {
+    opacity: 1;
+    transform: translateX(0) rotateY(0);
+  }
+  .about-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 55%, rgba(212,175,55,0.12) 100%);
+    pointer-events: none;
+  }
+  .about img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    filter: grayscale(0.25) contrast(1.05);
+    transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), filter 0.7s;
+  }
+  .about-img-wrap:hover img {
+    transform: scale(1.05);
+    filter: grayscale(0) contrast(1.12);
+  }
+  .about-text {
+    opacity: 0;
+    transform: translateX(70px);
+    transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.15s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.15s;
+  }
+  .about-text.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .about-text h2 {
+    font-size: 14px; letter-spacing: 0.2em;
+    color: var(--muted); margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .about-text .name {
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 200;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+    background: linear-gradient(180deg, var(--fg) 0%, var(--muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .about-text p { color: var(--muted); font-size: 17px; margin-bottom: 20px; }
+
+  /* === WORKS GRID (cooler 3D hover) === */
+  .works-particle {
+    position: relative;
+    padding: 0 40px 100px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .works-header {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 40px;
+  }
+  .works-meta {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+  .works-meta strong { color: var(--accent); font-weight: 600; }
+  .works-covers {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+    perspective: 1200px;
+  }
+  .works-covers .cover {
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.55s;
+    transform-style: preserve-3d;
+    border-radius: 3px;
+  }
+  .works-covers .cover img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.5s;
+  }
+  .works-covers .cover .title-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.92) 100%);
+    display: flex; align-items: flex-end;
+    padding: 16px 14px;
+    color: var(--fg);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transition: opacity 0.4s 0.05s;
+  }
+  .works-covers .cover:hover {
+    z-index: 10;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(212,175,55,0.15);
+  }
+  .works-covers .cover:hover img { transform: scale(1.12); filter: brightness(1.18) contrast(1.05); }
+  .works-covers .cover:hover .title-overlay { opacity: 1; }
+  .works-covers .cover .album-badge {
+    position: absolute;
+    top: 8px; left: 8px;
+    padding: 4px 9px;
+    background: rgba(212,175,55,0.9);
+    color: var(--bg);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 2px;
+    z-index: 2;
+  }
+  .works-covers .cover.placeholder .album-badge {
+    background: rgba(160,160,160,0.85);
+  }
+  .works-covers .cover.placeholder::after {
+    content: '待替換封面';
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(10,10,12,0.65);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    z-index: 1;
+    transition: opacity 0.35s;
+  }
+  .works-covers .cover.placeholder:hover::after { opacity: 0; }
+  @media (max-width: 1100px) { .works-covers { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 600px)  { .works-covers { grid-template-columns: repeat(2, 1fr); } }
+
+  /* === ENTRY POINTS === */
+  .entries {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 60px;
+  }
+  .entry-card {
+    padding: 60px 40px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--fg);
+    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    display: block;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(50px);
+    background: rgba(19,19,22,0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .entry-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .entry-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at top right, var(--glow) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .entry-card:hover::before { opacity: 1; }
+  .entry-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35), 0 0 40px rgba(212,175,55,0.08);
+  }
+  .entry-card .label {
+    font-size: 11px; letter-spacing: 0.3em;
+    color: var(--muted); margin-bottom: 20px;
+    position: relative;
+  }
+  .entry-card .title {
+    font-size: 32px; font-weight: 200;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .entry-card .desc {
+    color: var(--muted); font-size: 15px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .entry-card .arrow {
+    color: var(--accent); font-size: 24px;
+    letter-spacing: 0.1em;
+    position: relative;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .entry-card:hover .arrow { transform: translateX(12px); }
+
+  /* === CREDENTIALS === */
+  .grid-creds {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .grid-creds .item {
+    aspect-ratio: 1/1;
+    background: rgba(19,19,22,0.5);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    border: 1px solid var(--border);
+    opacity: 0;
+    transform: rotateY(25deg) scale(0.92);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1), border-color 0.35s, box-shadow 0.4s;
+  }
+  .grid-creds .item.visible {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+  }
+  .grid-creds .item:nth-child(2) { transition-delay: 0.12s; }
+  .grid-creds .item:nth-child(3) { transition-delay: 0.24s; }
+  .grid-creds .item:nth-child(4) { transition-delay: 0.36s; }
+  .grid-creds .item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(212,175,55,0.12);
+  }
+  .grid-creds .item img {
+    max-width: 100%; max-height: 100%; object-fit: contain;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .grid-creds .item:hover img { transform: scale(1.1); }
+
+  /* === CONTACT === */
+  .contact {
+    text-align: center;
+  }
+  .contact .links-row {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .contact .links-row .btn {
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  .contact .links-row .btn:nth-child(1) { animation-delay: 0.1s; }
+  .contact .links-row .btn:nth-child(2) { animation-delay: 0.2s; }
+  .contact .links-row .btn:nth-child(3) { animation-delay: 0.3s; }
+  .contact .links-row .btn:nth-child(4) { animation-delay: 0.4s; }
+  .contact .links-row .btn:nth-child(5) { animation-delay: 0.5s; }
+
+  footer {
+    padding: 80px 40px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer .signature {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 36px;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* === CURSOR GLOW === */
+  #cursor-glow {
+    position: fixed;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .about, .entries { grid-template-columns: 1fr; gap: 40px; }
+    .grid-creds { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 60px 24px; }
+    .nav { padding: 14px 24px; }
+    .nav .links { display: none; }
+    #cursor-glow { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="global-particles"></canvas>
+<div id="cursor-glow"></div>
+
+<nav class="nav">
+  <div class="logo">WILLWI</div>
+  <div class="links">
+    <a href="#about">About</a>
+    <a href="#works">Works</a>
+    <a href="#entries">Enter</a>
+    <a href="#credentials">Credentials</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="label">SONGWRITER · PRODUCER · TAIWAN</div>
+    <h1>讓音樂<br>安靜地說話</h1>
+    <p class="subtitle">創作歌手與音樂製作人<br>作品、製作、聲音設計</p>
+    <div class="cta-row">
+      <a href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" class="btn">▶ 收聽</a>
+      <a href="https://metro-bvugldh17-willwi.vercel.app" class="btn accent">情緒捷運線 →</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-head">
+    <div class="label">About</div>
+    <h2>關於 Willwi</h2>
+  </div>
+  <div class="about">
+    <div class="about-img-wrap">
+      <img src="assets/images/Willwi 2026official-portrait.jpg" alt="Willwi 2026 official portrait">
+    </div>
+    <div class="about-text">
+      <div class="name">Willwi<br>陳威兒</div>
+      <p>來自台灣的創作歌手與音樂製作人。</p>
+      <p>作品、製作資訊與時間，在 Archive 中彼此相連。以台灣獨立音樂場景為起點，從 Demo 到編曲、從現場到發行，每一個階段都有完整的記錄與思考。</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works" class="works-particle">
+  <div class="section-head works-header">
+    <div class="label">Works · 14 Releases</div>
+    <h2>作品</h2>
+  </div>
+  <div class="works-meta">
+    <strong>10</strong> 張專輯 · <strong>4</strong> 首單曲與EP · <strong>2025–2026</strong>
+  </div>
+  <div class="works-covers">
+    <div class="cover">
+      <span class="album-badge">2026</span>
+      <img src="assets/images/Graceful Goodbye (Youtube Sharing Artwork).jpeg" alt="Graceful Goodbye">
+      <div class="title-overlay">Graceful Goodbye</div>
+    </div>
+    <div class="cover">
+      <span class="album-badge">2026</span>
+      <img src="assets/images/Lento in Am (Spotify Sharing Artwork).jpeg" alt="Lento in Am">
+      <div class="title-overlay">Lento in Am</div>
+    </div>
+    <div class="cover">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/來不及說再見 (Itunes Sharing Artwork).jpeg" alt="來不及說再見">
+      <div class="title-overlay">來不及說再見</div>
+    </div>
+    <div class="cover">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/心慌 - Live Version (Itunes Sharing Artwork).jpeg" alt="心慌 - Live Version">
+      <div class="title-overlay">心慌 — Live Version</div>
+    </div>
+    <div class="cover">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/錯位時空 (Spotify Sharing Artwork).jpeg" alt="錯位時空">
+      <div class="title-overlay">錯位時空</div>
+    </div>
+    <div class="cover">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image.png" alt="再愛一次">
+      <div class="title-overlay">再愛一次</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (1).png" alt="placeholder">
+      <div class="title-overlay">黑灰色</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (2).png" alt="placeholder">
+      <div class="title-overlay">日常</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (3).png" alt="placeholder">
+      <div class="title-overlay">回憶</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (4).png" alt="placeholder">
+      <div class="title-overlay">心慌</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (5).png" alt="placeholder">
+      <div class="title-overlay">Pendulum in Reverse</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (6).png" alt="placeholder">
+      <div class="title-overlay">The Art Of Goodbye</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (7).png" alt="placeholder">
+      <div class="title-overlay">Forever</div>
+    </div>
+    <div class="cover placeholder">
+      <span class="album-badge">2025</span>
+      <img src="assets/images/my-image (8).png" alt="placeholder">
+      <div class="title-overlay">出口</div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTRY POINTS -->
+<section id="entries">
+  <div class="section-head">
+    <div class="label">Enter</div>
+    <h2>走進 Willwi</h2>
+  </div>
+  <div class="entries">
+    <a class="entry-card" href="https://metro-bvugldh17-willwi.vercel.app" target="_blank" rel="noopener noreferrer">
+      <div class="label">Interactive Experience</div>
+      <div class="title">情緒捷運線</div>
+      <div class="desc">深夜情緒模式。先留資料。一組密碼，進站。<br>僅支援心碎感應支付，不開往快樂。</div>
+      <div class="arrow">→ 進站</div>
+    </a>
+    <a class="entry-card" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer">
+      <div class="label">Complete Archive</div>
+      <div class="title">作品 Archive</div>
+      <div class="desc">作品、製作資訊、Spotify editorial、被選入的紀錄。<br>完整的作品履歷與時間軸。</div>
+      <div class="arrow">→ 瀏覽 Archive</div>
+    </a>
+  </div>
+</section>
+
+<!-- CREDENTIALS -->
+<section id="credentials">
+  <div class="section-head">
+    <div class="label">Credentials</div>
+    <h2>專業身分與認證</h2>
+  </div>
+  <div class="grid-creds">
+    <div class="item"><img src="assets/images/Credits.jpg" alt="Credits"></div>
+    <div class="item"><img src="assets/images/Graduation Certificate.jpg" alt="Graduation"></div>
+    <div class="item"><img src="assets/images/Lyrics Curator Certificate.jpg" alt="Lyrics Curator"></div>
+    <div class="item"><img src="assets/images/64c7d395ad3e0ddc174c6bf0_Avatar_graduate-10.png" alt="Avatar Graduate"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="section-head">
+    <div class="label">Contact</div>
+    <h2>聯絡</h2>
+  </div>
+  <p style="color: var(--muted); margin-bottom: 24px; font-size: 18px;">info@willwi.com</p>
+  <div class="links-row">
+    <a href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" class="btn" target="_blank" rel="noopener noreferrer">Spotify</a>
+    <a href="https://music.apple.com/us/artist/willwi/1798471457" class="btn" target="_blank" rel="noopener noreferrer">Apple Music</a>
+    <a href="https://www.youtube.com/@Willwi" class="btn" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/willwi888/" class="btn" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://lin.ee/XsPCwGm" class="btn" target="_blank" rel="noopener noreferrer">LINE</a>
+  </div>
+</section>
+
+<footer>
+  <span class="signature">Willwi</span>
+  © 2026 Willwi 陳威兒 · Made with sound & silence
+</footer>
+
+<script>
+// === GLOBAL PARTICLE SYSTEM — cooler version ===
+const gCanvas = document.getElementById('global-particles');
+if (gCanvas) {
+  const ctx = gCanvas.getContext('2d');
+  const ACCENT = '#d4af37';
+  const FG = '#f4f4f5';
+
+  function resize() {
+    gCanvas.width = window.innerWidth;
+    gCanvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const SECTIONS = [
+    { id: 'hero',         density: 0.55, accent: 0.22, sizeMin: 0.9, sizeMax: 2.8 },
+    { id: 'about',        density: 0.35, accent: 0.12, sizeMin: 0.7, sizeMax: 2.0 },
+    { id: 'works',        density: 1.35, accent: 0.38, sizeMin: 0.9, sizeMax: 3.0 },
+    { id: 'entries',      density: 0.7,  accent: 0.25, sizeMin: 0.8, sizeMax: 2.3 },
+    { id: 'credentials',  density: 0.4,  accent: 0.45, sizeMin: 0.7, sizeMax: 2.2 },
+    { id: 'contact',      density: 0.25, accent: 0.35, sizeMin: 0.6, sizeMax: 1.8 }
+  ];
+
+  const BASE_COUNT = 95;
+  const particles = [];
+  SECTIONS.forEach(sec => {
+    const count = Math.floor(BASE_COUNT * sec.density);
+    const secEl = document.getElementById(sec.id);
+    if (!secEl) return;
+    const rect = secEl.getBoundingClientRect();
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: rect.left + Math.random() * rect.width,
+        y: rect.top + window.scrollY + Math.random() * rect.height,
+        vx: (Math.random() - 0.5) * 0.55,
+        vy: (Math.random() - 0.5) * 0.55,
+        r: sec.sizeMin + Math.random() * (sec.sizeMax - sec.sizeMin),
+        hue: Math.random() < sec.accent ? 'gold' : 'fg',
+        life: Math.random()
+      });
+    }
+  });
+
+  const mouse = { x: -9999, y: -9999, active: false };
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  });
+  window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+  function tick() {
+    ctx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+
+    // soft mouse glow
+    if (mouse.active) {
+      const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 180);
+      g.addColorStop(0, 'rgba(212,175,55,0.18)');
+      g.addColorStop(0.4, 'rgba(212,175,55,0.06)');
+      g.addColorStop(1, 'rgba(212,175,55,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(mouse.x - 180, mouse.y - 180, 360, 360);
+    }
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life += 0.008;
+
+      // soft wrap
+      if (p.x < -20) p.x = gCanvas.width + 20;
+      if (p.x > gCanvas.width + 20) p.x = -20;
+      if (p.y < -20) p.y = gCanvas.height + 20;
+      if (p.y > gCanvas.height + 20) p.y = -20;
+
+      // magnetic attraction + gentle repulsion mix
+      if (mouse.active) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        if (dist < 220) {
+          const force = (220 - dist) / 220;
+          // attract gold particles, repel others slightly
+          if (p.hue === 'gold') {
+            p.vx += (dx / dist) * force * 0.08;
+            p.vy += (dy / dist) * force * 0.08;
+          } else {
+            p.vx -= (dx / dist) * force * 0.04;
+            p.vy -= (dy / dist) * force * 0.04;
+          }
+        }
+      }
+
+      // damp velocity
+      p.vx *= 0.992;
+      p.vy *= 0.992;
+
+      // connections
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const ddx = p.x - q.x, ddy = p.y - q.y;
+        const dd2 = ddx*ddx + ddy*ddy;
+        if (dd2 < 16000) {
+          const alpha = 1 - Math.sqrt(dd2) / 126;
+          if (p.hue === 'gold' || q.hue === 'gold') {
+            ctx.strokeStyle = `rgba(212,175,55,${alpha * 0.45})`;
+          } else {
+            ctx.strokeStyle = `rgba(244,244,245,${alpha * 0.1})`;
+          }
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.stroke();
+        }
+      }
+
+      // draw particle with soft glow
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (p.hue === 'gold') {
+        ctx.fillStyle = ACCENT;
+        ctx.shadowColor = ACCENT;
+        ctx.shadowBlur = 14 + Math.sin(p.life) * 4;
+      } else {
+        ctx.fillStyle = 'rgba(244,244,245,0.65)';
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+      }
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// === CURSOR GLOW ===
+const cursorGlow = document.getElementById('cursor-glow');
+if (cursorGlow) {
+  window.addEventListener('mousemove', (e) => {
+    cursorGlow.style.left = e.clientX + 'px';
+    cursorGlow.style.top = e.clientY + 'px';
+    cursorGlow.style.opacity = '1';
+  });
+  window.addEventListener('mouseleave', () => {
+    cursorGlow.style.opacity = '0';
+  });
+}
+
+// === 3D TILT on works covers ===
+document.querySelectorAll('.works-covers .cover').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -11;
+    const rotateY = ((x - centerX) / centerX) * 11;
+    card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.06,1.06,1.06)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+  });
+});
+
+// IntersectionObserver — cooler reveals
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.section-head, .about-img-wrap, .about-text, .entry-card, .grid-creds .item').forEach(el => {
+  observer.observe(el);
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
