@@ -6,6 +6,9 @@
 <title>Willwi — 創作歌手與音樂製作人</title>
 <meta name="description" content="Willwi 陳威兒 — 台灣創作歌手與音樂製作人。">
 <meta name="theme-color" content="#0a0a0c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0c;
@@ -20,7 +23,7 @@
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
     line-height: 1.7;
     font-weight: 300;
     overflow-x: hidden;
@@ -142,10 +145,11 @@
     animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
   }
   .hero h1 {
-    font-size: clamp(48px, 7vw, 96px);
-    font-weight: 200;
-    letter-spacing: 0.04em;
-    line-height: 1.1;
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: clamp(44px, 6.2vw, 84px);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    line-height: 1.28;
     margin-bottom: 24px;
     opacity: 0;
     animation: fadeUp 1.3s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
@@ -230,8 +234,10 @@
     background: linear-gradient(90deg, var(--accent), transparent);
   }
   .section-head h2 {
+    font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: clamp(36px, 5vw, 56px);
-    font-weight: 200; letter-spacing: 0.02em;
+    font-weight: 300;
+    letter-spacing: 0.08em;
   }
 
   .about {
@@ -265,9 +271,10 @@
   }
   .about-text.visible { opacity: 1; transform: translateX(0); }
   .about-text .name {
+    font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: clamp(40px, 5vw, 64px);
-    font-weight: 200;
-    letter-spacing: 0.02em;
+    font-weight: 300;
+    letter-spacing: 0.08em;
     margin-bottom: 32px;
     background: linear-gradient(180deg, var(--fg) 0%, var(--muted) 100%);
     -webkit-background-clip: text;
@@ -366,7 +373,15 @@
     color: var(--muted);
     font-size: 13px;
   }
-  footer .signature { display: block; margin-bottom: 16px; font-size: 36px; animation: float 4s ease-in-out infinite; }
+  footer .signature-img {
+    display: block;
+    margin: 0 auto 18px;
+    height: 72px;
+    width: auto;
+    max-width: 280px;
+    mix-blend-mode: screen;
+    animation: float 4s ease-in-out infinite;
+  }
 
   #cursor-glow {
     position: fixed;
@@ -473,18 +488,11 @@
     <div class="label">Contact</div>
     <h2>聯絡</h2>
   </div>
-  <p style="color: var(--muted); margin-bottom: 24px; font-size: 18px;">info@willwi.com</p>
-  <div class="links-row">
-    <a href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" class="btn" target="_blank" rel="noopener noreferrer">Spotify</a>
-    <a href="https://music.apple.com/us/artist/willwi/1798471457" class="btn" target="_blank" rel="noopener noreferrer">Apple Music</a>
-    <a href="https://www.youtube.com/@Willwi" class="btn" target="_blank" rel="noopener noreferrer">YouTube</a>
-    <a href="https://www.instagram.com/willwi888/" class="btn" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://lin.ee/XsPCwGm" class="btn" target="_blank" rel="noopener noreferrer">LINE</a>
-  </div>
+  <a href="mailto:info@willwi.com" style="color: var(--muted); font-size: 18px; letter-spacing: 0.08em; text-decoration: none;">info@willwi.com</a>
 </section>
 
 <footer>
-  <span class="signature">Willwi</span>
+  <img class="signature-img" src="assets/images/signature_1_white.png" alt="Willwi">
   © 2026 Willwi 陳威兒 · Made with sound & silence
 </footer>
 
