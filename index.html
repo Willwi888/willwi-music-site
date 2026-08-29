@@ -7,11 +7,7 @@
 <meta name="theme-color" content="#0a0a0c">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    width: 100%; height: 100%; overflow: hidden;
-    background: #0a0a0c; color: #a1a1aa;
-    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
-  }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0c; color: #a1a1aa; font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif; }
   #global-particles { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
   .orbs { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
   @keyframes drift-a { 0%,100%{transform:translate(0,0)} 50%{transform:translate(18px,-22px)} }
@@ -27,10 +23,9 @@
   .orb-3{width:92px;height:92px;left:78%;top:18%;animation:halo 6s ease-in-out infinite,drift-c 14s ease-in-out infinite}
   .orb-4{width:140px;height:140px;left:68%;top:58%;animation:halo 9s ease-in-out infinite,drift-a 22s ease-in-out infinite reverse}
   .orb-5{width:108px;height:108px;left:18%;top:62%;animation:halo 7.5s ease-in-out infinite,drift-b 18s ease-in-out infinite reverse}
-  .orb-6{width:72px;height:72px;left:34%;top:38%;animation:halo 8s ease-in-out infinite,drift-c 20s ease-in-out infinite}
-  .orb-7{width:64px;height:64px;left:56%;top:42%;animation:halo 6.5s ease-in-out infinite,drift-a 17s ease-in-out infinite reverse}
-  .orb-8{width:80px;height:80px;left:86%;top:48%;animation:halo 9s ease-in-out infinite,drift-b 21s ease-in-out infinite}
-  .orb-9{width:60px;height:60px;left:4%;top:48%;animation:halo 7s ease-in-out infinite,drift-c 15s ease-in-out infinite reverse}
+  .orb-6{width:88px;height:88px;left:34%;top:38%;animation:halo 8s ease-in-out infinite,drift-c 20s ease-in-out infinite}
+  .orb-7{width:76px;height:76px;left:58%;top:44%;animation:halo 6.5s ease-in-out infinite,drift-a 17s ease-in-out infinite reverse}
+  .orb-8{width:70px;height:70px;left:88%;top:62%;animation:halo 9s ease-in-out infinite,drift-b 21s ease-in-out infinite}
   footer { position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;font-size:13px;letter-spacing:.04em;border:0;background:none; }
   .layer{display:none;position:fixed;inset:0;z-index:20;background:rgba(5,5,7,.82);align-items:center;justify-content:center;padding:40px 24px}
   .layer.open{display:flex}
@@ -49,17 +44,13 @@
   <a class="orb orb-3" href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-16.jpg" alt=""></a>
   <a class="orb orb-4" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-14.jpg" alt=""></a>
   <a class="orb orb-5" href="#layer-contact"><img src="assets/images/bk-12.jpg" alt=""></a>
-  <a class="orb orb-6" href="assets/images/Credits.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/Credits.jpg" alt=""></a>
-  <a class="orb orb-7" href="assets/images/Graduation%20Certificate.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/Graduation%20Certificate.jpg" alt=""></a>
-  <a class="orb orb-8" href="assets/images/Lyrics%20Curator%20Certificate.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/Lyrics%20Curator%20Certificate.jpg" alt=""></a>
-  <a class="orb orb-9" href="assets/images/64c7d395ad3e0ddc174c6bf0_Avatar_graduate-10.png" target="_blank" rel="noopener noreferrer"><img src="assets/images/64c7d395ad3e0ddc174c6bf0_Avatar_graduate-10.png" alt=""></a>
+  <a class="orb orb-6" href="#layer-about"><img src="assets/images/bk-17.png" alt=""></a>
+  <a class="orb orb-7" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-18.jpg" alt=""></a>
+  <a class="orb orb-8" href="assets/images/Credits.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-19.jpg" alt=""></a>
 </div>
 <div class="layer" id="layer-about">
   <button class="layer-close" type="button">x</button>
-  <div class="layer-card">
-    <h2>Willwi 陳威兒</h2>
-    <p>來自台灣的創作歌手與音樂製作人。</p>
-  </div>
+  <div class="layer-card"><h2>Willwi 陳威兒</h2><p>來自台灣的創作歌手與音樂製作人。</p></div>
 </div>
 <div class="layer" id="layer-contact">
   <button class="layer-close" type="button">x</button>
@@ -67,36 +58,15 @@
 </div>
 <footer>© 2026 Willwi 陳威兒 · Made with sound & silence</footer>
 <script>
-const gCanvas=document.getElementById('global-particles');
-const ctx=gCanvas.getContext('2d');
-function resize(){gCanvas.width=innerWidth;gCanvas.height=innerHeight;}
-resize();addEventListener('resize',resize);
+const gCanvas=document.getElementById('global-particles');const ctx=gCanvas.getContext('2d');
+function resize(){gCanvas.width=innerWidth;gCanvas.height=innerHeight;} resize(); addEventListener('resize',resize);
 const COUNT=Math.min(260,Math.floor(innerWidth*innerHeight/7500));
 const particles=Array.from({length:COUNT},()=>({x:Math.random()*gCanvas.width,y:Math.random()*gCanvas.height,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,r:.8+Math.random()*2.2,gold:Math.random()<.38}));
 const mouse={x:-9999,y:-9999,on:false};
 addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;mouse.on=true;});
 addEventListener('mouseleave',()=>mouse.on=false);
-function tick(){
-  ctx.clearRect(0,0,gCanvas.width,gCanvas.height);
-  if(mouse.on){const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,200);g.addColorStop(0,'rgba(212,175,55,0.16)');g.addColorStop(1,'rgba(212,175,55,0)');ctx.fillStyle=g;ctx.fillRect(mouse.x-200,mouse.y-200,400,400);}
-  for(let i=0;i<particles.length;i++){
-    const p=particles[i]; p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0)p.x=gCanvas.width;if(p.x>gCanvas.width)p.x=0;
-    if(p.y<0)p.y=gCanvas.height;if(p.y>gCanvas.height)p.y=0;
-    if(mouse.on){const dx=mouse.x-p.x,dy=mouse.y-p.y,d=Math.hypot(dx,dy)||1;if(d<240){const f=(240-d)/240*(p.gold?1:-1)*.08;p.vx+=dx/d*f;p.vy+=dy/d*f;}}
-    p.vx*=.99;p.vy*=.99;
-    for(let j=i+1;j<particles.length;j++){
-      const q=particles[j],dd=Math.hypot(p.x-q.x,p.y-q.y);
-      if(dd<120){ctx.strokeStyle=(p.gold||q.gold)?`rgba(212,175,55,${(1-dd/120)*.45})`:`rgba(244,244,245,${(1-dd/120)*.1})`;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
-    }
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=p.gold?'#d4af37':'rgba(244,244,245,.7)';ctx.fill();
-  }
-  requestAnimationFrame(tick);
-}
-tick();
-const bgm=document.getElementById('bgm');
-if(bgm){bgm.volume=0.32;const start=()=>{bgm.play().catch(()=>{});window.removeEventListener('pointerdown',start);};window.addEventListener('pointerdown',start);}
+function tick(){ctx.clearRect(0,0,gCanvas.width,gCanvas.height);if(mouse.on){const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,200);g.addColorStop(0,'rgba(212,175,55,0.16)');g.addColorStop(1,'rgba(212,175,55,0)');ctx.fillStyle=g;ctx.fillRect(mouse.x-200,mouse.y-200,400,400);}for(let i=0;i<particles.length;i++){const p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=gCanvas.width;if(p.x>gCanvas.width)p.x=0;if(p.y<0)p.y=gCanvas.height;if(p.y>gCanvas.height)p.y=0;if(mouse.on){const dx=mouse.x-p.x,dy=mouse.y-p.y,d=Math.hypot(dx,dy)||1;if(d<240){const f=(240-d)/240*(p.gold?1:-1)*.08;p.vx+=dx/d*f;p.vy+=dy/d*f;}}p.vx*=.99;p.vy*=.99;for(let j=i+1;j<particles.length;j++){const q=particles[j],dd=Math.hypot(p.x-q.x,p.y-q.y);if(dd<120){ctx.strokeStyle=(p.gold||q.gold)?`rgba(212,175,55,${(1-dd/120)*.45})`:`rgba(244,244,245,${(1-dd/120)*.1})`;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'#d4af37':'rgba(244,244,245,.7)';ctx.fill();}requestAnimationFrame(tick);}tick();
+const bgm=document.getElementById('bgm');if(bgm){bgm.volume=0.32;const start=()=>{bgm.play().catch(()=>{});window.removeEventListener('pointerdown',start);};window.addEventListener('pointerdown',start);}
 document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
 document.querySelectorAll('.layer,.layer-close').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el||el.classList.contains('layer-close')){document.querySelectorAll('.layer').forEach(l=>l.classList.remove('open'));}});});
 </script>
