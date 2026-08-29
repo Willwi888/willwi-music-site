@@ -112,57 +112,64 @@
     min-height: 700px;
     padding: 0;
     position: relative;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.82) 100%),
-      url('assets/images/willwi-hero-desktop-brand.jpg.jpg') center/cover no-repeat;
-    display: flex; align-items: flex-end;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 30% 40%, transparent 0%, rgba(0,0,0,0.35) 100%);
-  }
-  .hero::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: url('assets/images/willwi-hero-desktop-brand.jpg.jpg') center/cover no-repeat;
-    animation: ken-burns 28s ease-in-out infinite alternate;
-    z-index: -1;
-    opacity: 0.55;
-  }
-  .hero-content {
-    max-width: 1280px; margin: 0 auto; width: 100%;
-    padding: 0 40px 100px;
+  .orbs {
     position: relative;
     z-index: 2;
+    width: min(920px, 92vw);
+    height: min(560px, 70vh);
   }
-  .hero .label {
-    font-size: 12px; letter-spacing: 0.35em;
-    color: var(--accent);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    overflow: hidden;
+    display: block;
+    border: 1px solid rgba(212,175,55,0.28);
+    box-shadow: 0 0 0 0 rgba(212,175,55,0.0);
+    transition: transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s, border-color .4s;
+    animation: fadeUp 1.1s cubic-bezier(.16,1,.3,1) both, float 6s ease-in-out infinite;
   }
-  .hero h1 {
-    font-family: "Noto Serif TC", "Songti TC", serif;
-    font-size: clamp(44px, 6.2vw, 84px);
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    line-height: 1.28;
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 1.3s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
+  .orb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.05) contrast(1.05);
   }
-  .hero .subtitle {
-    color: var(--muted); font-size: 18px; max-width: 600px;
-    margin-bottom: 36px;
+  .orb span {
+    position: absolute;
+    left: 0; right: 0; bottom: 18%;
+    text-align: center;
+    color: #f4f4f5;
+    font-size: 12px;
+    letter-spacing: .18em;
     opacity: 0;
-    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+    transition: opacity .35s;
+    text-shadow: 0 2px 16px #000;
   }
-  .hero .cta-row {
-    opacity: 0;
-    animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+  .orb:hover {
+    transform: scale(1.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(212,175,55,.28);
+    z-index: 5;
+  }
+  .orb:hover span { opacity: 1; }
+  .orb-1 { width: 168px; height: 168px; left: 6%; top: 18%; animation-delay: .1s, 0s; }
+  .orb-2 { width: 220px; height: 220px; left: 28%; top: 8%; animation-delay: .25s, .6s; }
+  .orb-3 { width: 132px; height: 132px; left: 58%; top: 22%; animation-delay: .4s, 1.2s; }
+  .orb-4 { width: 186px; height: 186px; left: 72%; top: 42%; animation-delay: .55s, .3s; }
+  .orb-5 { width: 148px; height: 148px; left: 38%; top: 52%; animation-delay: .7s, 1.8s; }
+  @media (max-width: 768px) {
+    .orbs { height: 420px; }
+    .orb-1 { width: 110px; height: 110px; }
+    .orb-2 { width: 148px; height: 148px; }
+    .orb-3 { width: 96px; height: 96px; }
+    .orb-4 { width: 124px; height: 124px; }
+    .orb-5 { width: 108px; height: 108px; }
   }
   .signature {
     font-family: "Brush Script MT", "標楷體", cursive;
@@ -420,16 +427,28 @@
 </nav>
 
 <section class="hero" id="hero">
-  <div class="hero-content">
-    <div class="label">SONGWRITER · PRODUCER · TAIWAN</div>
-    <h1>讓音樂<br>安靜地說話</h1>
-    <p class="subtitle">創作歌手與音樂製作人<br>Willwi 陳威兒</p>
-    <div class="cta-row">
-      <a href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" class="btn">▶ 收聽</a>
-      <a href="https://metro-bvugldh17-willwi.vercel.app" class="btn accent">情緒捷運線 →</a>
-    </div>
+  <div class="orbs">
+    <a class="orb orb-1" href="#about">
+      <img src="assets/images/bk-15.jpg" alt="About">
+      <span>ABOUT</span>
+    </a>
+    <a class="orb orb-2" href="https://metro-bvugldh17-willwi.vercel.app" target="_blank" rel="noopener noreferrer">
+      <img src="assets/images/bk-13.jpg" alt="情緒捷運線">
+      <span>METRO</span>
+    </a>
+    <a class="orb orb-3" href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" target="_blank" rel="noopener noreferrer">
+      <img src="assets/images/bk-17.jpg" alt="Listen">
+      <span>LISTEN</span>
+    </a>
+    <a class="orb orb-4" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer">
+      <img src="assets/images/bk-14.jpg" alt="Archive">
+      <span>ARCHIVE</span>
+    </a>
+    <a class="orb orb-5" href="#contact">
+      <img src="assets/images/bk-12.jpg" alt="Contact">
+      <span>CONTACT</span>
+    </a>
   </div>
-  <div class="scroll-hint">SCROLL</div>
 </section>
 
 <section id="about">
