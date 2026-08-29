@@ -18,8 +18,10 @@
   a.orb { position:absolute; border-radius:50%; overflow:hidden; display:block; pointer-events:auto; text-decoration:none; border:1px solid rgba(212,175,55,.2); background:#070708; }
   a.orb img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; filter:brightness(.08) saturate(.15) contrast(1.1); opacity:.55; animation:spin-slow 90s linear infinite; transition: filter .45s ease, opacity .45s ease; }
   a.orb span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(244,244,245,.92); font-size:11px; letter-spacing:.22em; text-transform:uppercase; opacity:0; pointer-events:none; text-shadow:0 2px 12px #000; transition:opacity .35s ease; }
-  a.orb:hover img { filter:brightness(.55) saturate(.55) contrast(1.15); opacity:1; }
+  a.orb:hover img { filter:brightness(.75) saturate(.6) contrast(1.15); opacity:1; }
   a.orb:hover span { opacity:1; }
+  .orb-6 img { filter:brightness(.2) saturate(.25) contrast(1.15); }
+  .orb-6:hover img { filter:brightness(1.05) saturate(.7) contrast(1.15); }
   .orb-1{width:120px;height:120px;left:8%;top:16%;animation:halo 7s ease-in-out infinite,drift-a 16s ease-in-out infinite}
   .orb-2{width:168px;height:168px;left:42%;top:10%;animation:halo 8s ease-in-out infinite,drift-b 19s ease-in-out infinite}
   .orb-3{width:92px;height:92px;left:78%;top:18%;animation:halo 6s ease-in-out infinite,drift-c 14s ease-in-out infinite}
