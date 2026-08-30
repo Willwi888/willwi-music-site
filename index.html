@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willwi</title>
+<meta name="theme-color" content="#0a0a0c">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a0c;color:#a1a1aa;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif}
+#global-particles{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+.orbs{position:fixed;inset:0;z-index:2;pointer-events:none}
+@keyframes drift-a{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-22px)}}
+@keyframes drift-b{0%,100%{transform:translate(0,0)}50%{transform:translate(-24px,14px)}}
+@keyframes drift-c{0%,100%{transform:translate(0,0)}50%{transform:translate(12px,20px)}}
+@keyframes halo{0%,100%{box-shadow:0 0 16px rgba(212,175,55,.07)}50%{box-shadow:0 0 34px rgba(212,175,55,.18)}}
+@keyframes spin-slow{from{transform:rotate(0) scale(1.12)}to{transform:rotate(360deg) scale(1.12)}}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.28)}50%{box-shadow:0 0 0 8px rgba(212,175,55,0)}}
+a.orb{position:absolute;border-radius:50%;overflow:hidden;display:block;pointer-events:auto;text-decoration:none;border:1px solid rgba(212,175,55,.2);background:#070708;will-change:left,top}
+a.orb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;filter:brightness(.08) saturate(.15) contrast(1.1);opacity:.55;animation:spin-slow 90s linear infinite;transition:filter .45s ease,opacity .45s ease}
+a.orb span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,244,245,.92);font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:0;pointer-events:none;text-shadow:0 2px 12px #000;transition:opacity .35s ease}
+a.orb:hover img{filter:brightness(.75) saturate(.6) contrast(1.15);opacity:1}
+a.orb:hover span{opacity:1}
+.orb-6 img{filter:brightness(.2) saturate(.25) contrast(1.15)}
+.orb-6:hover img{filter:brightness(1.05) saturate(.7) contrast(1.15)}
+.orb-1{width:120px;height:120px;left:8%;top:16%;animation:halo 7s ease-in-out infinite,drift-a 16s ease-in-out infinite}
+.orb-2{width:168px;height:168px;left:42%;top:10%;animation:halo 8s ease-in-out infinite,drift-b 19s ease-in-out infinite}
+.orb-3{width:92px;height:92px;left:78%;top:18%;animation:halo 6s ease-in-out infinite,drift-c 14s ease-in-out infinite}
+.orb-4{width:140px;height:140px;left:68%;top:58%;animation:halo 9s ease-in-out infinite,drift-a 22s ease-in-out infinite reverse}
+.orb-5{width:108px;height:108px;left:18%;top:62%;animation:halo 7.5s ease-in-out infinite,drift-b 18s ease-in-out infinite reverse}
+.orb-6{width:88px;height:88px;left:34%;top:38%;animation:halo 8s ease-in-out infinite,drift-c 20s ease-in-out infinite}
+.orb-7{width:76px;height:76px;left:58%;top:44%;animation:halo 6.5s ease-in-out infinite,drift-a 17s ease-in-out infinite reverse}
+.orb-8{width:70px;height:70px;left:88%;top:62%;animation:halo 9s ease-in-out infinite,drift-b 21s ease-in-out infinite}
+body.physics a.orb{animation:halo 8s ease-in-out infinite}
+#mode-dot{position:fixed;left:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
+#share-dot{position:fixed;left:20px;bottom:22px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(212,175,55,.35);border:1px solid rgba(212,175,55,.28);cursor:pointer;opacity:.55}
+#share-dot:hover{opacity:1}
+#sign{display:none;position:fixed;inset:0;z-index:30;background:rgba(5,5,7,.55);align-items:center;justify-content:center}
+#sign.open{display:flex}
+#sign .sign-box{display:flex;flex-direction:column;gap:18px;align-items:center}
+#sign input{background:transparent;border:0;border-bottom:1px solid rgba(212,175,55,.4);color:#f4f4f5;font-size:16px;letter-spacing:.12em;text-align:center;padding:8px 4px;outline:none;width:240px}
+#sign p{font-size:11px;letter-spacing:.08em;color:#71717a;max-width:260px;text-align:center;line-height:1.7}
+footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;font-size:13px;letter-spacing:.04em;border:0;background:none}
+.layer{display:none;position:fixed;inset:0;z-index:20;background:rgba(5,5,7,.82);align-items:center;justify-content:center;padding:40px 24px}
+.layer.open{display:flex}
+.layer-card{max-width:520px;text-align:center;line-height:1.9}
+.layer-card h2{color:#f4f4f5;font-weight:300;font-size:28px;margin-bottom:16px}
+.layer-card a{color:#d4af37;text-decoration:none}
+.layer-close{position:absolute;top:24px;right:28px;color:#a1a1aa;font-size:22px;cursor:pointer;background:none;border:0}
+</style>
+</head>
+<body>
+<canvas id="global-particles"></canvas>
+<audio id="bgm-echoes" loop preload="auto" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
+<audio id="bgm-dawn" loop preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
+<button id="mode-dot" type="button"></button>
+<button id="share-dot" type="button"></button>
+<div class="orbs">
+<a class="orb orb-1" href="#layer-about"><img src="assets/images/bk-15.jpg" alt=""><span>ABOUT</span></a>
+<a class="orb orb-2" href="https://metro-bvugldh17-willwi.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-13.jpg" alt=""><span>METRO</span></a>
+<a class="orb orb-3" href="https://open.spotify.com/artist/3ascZ8Rb2KDw4QyCy29Om4" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-16.jpg" alt=""><span>LISTEN</span></a>
+<a class="orb orb-4" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-14.jpg" alt=""><span>ARCHIVE</span></a>
+<a class="orb orb-5" href="#layer-contact"><img src="assets/images/bk-12.jpg" alt=""><span>CONTACT</span></a>
+<a class="orb orb-6" href="#layer-about"><img src="assets/images/bk-17.jpg" alt=""><span>WILLWI</span></a>
+<a class="orb orb-7" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-18.jpg" alt=""><span>WORKS</span></a>
+<a class="orb orb-8" href="assets/images/Credits.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-19.jpg" alt=""><span>CREDITS</span></a>
+</div>
+<div class="layer" id="layer-about"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Willwi 陳威兒</h2><p>來自台灣的創作歌手與音樂製作人。</p></div></div>
+<div class="layer" id="layer-contact"><button class="layer-close" type="button">x</button><div class="layer-card"><p><a href="mailto:info@willwi.com">info@willwi.com</a></p></div></div>
+<form name="starfield" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden><input type="text" name="name"><input type="email" name="email"><input name="bot-field"></form>
+<div id="sign"><div class="sign-box"><input id="sign-name" maxlength="24" autocomplete="name" placeholder="名字"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><p>信箱只用於保存這次星場紀錄，不公開、不寄電子報。</p></div></div>
+<footer>© 2026 Willwi 陳威兒 · Made with sound & silence</footer>
+<script>
+const gCanvas=document.getElementById('global-particles');const ctx=gCanvas.getContext('2d');
+function resizeCanvas(){gCanvas.width=innerWidth;gCanvas.height=innerHeight;}resizeCanvas();addEventListener('resize',resizeCanvas);
+const COUNT=Math.min(260,Math.floor(innerWidth*innerHeight/7500));
+const particles=Array.from({length:COUNT},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,r:.8+Math.random()*2.2,gold:Math.random()<.38}));
+const mouse={x:-9999,y:-9999,on:false};
+addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;mouse.on=true;});
+addEventListener('mouseleave',()=>mouse.on=false);
+function drawParticles(){ctx.clearRect(0,0,gCanvas.width,gCanvas.height);if(mouse.on){const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,200);g.addColorStop(0,'rgba(212,175,55,0.16)');g.addColorStop(1,'rgba(212,175,55,0)');ctx.fillStyle=g;ctx.fillRect(mouse.x-200,mouse.y-200,400,400);}for(let i=0;i<particles.length;i++){const p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=gCanvas.width;if(p.x>gCanvas.width)p.x=0;if(p.y<0)p.y=gCanvas.height;if(p.y>gCanvas.height)p.y=0;if(mouse.on){const dx=mouse.x-p.x,dy=mouse.y-p.y,d=Math.hypot(dx,dy)||1;if(d<240){const f=(240-d)/240*(p.gold?1:-1)*.08;p.vx+=dx/d*f;p.vy+=dy/d*f;}}p.vx*=.99;p.vy*=.99;for(let j=i+1;j<particles.length;j++){const q=particles[j],dd=Math.hypot(p.x-q.x,p.y-q.y);if(dd<120){ctx.strokeStyle=(p.gold||q.gold)?`rgba(212,175,55,${(1-dd/120)*.45})`:`rgba(244,244,245,${(1-dd/120)*.1})`;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'#d4af37':'rgba(244,244,245,.7)';ctx.fill();}}
+const orbs=[...document.querySelectorAll('a.orb')].map(el=>{const r=el.getBoundingClientRect();return{el,x:r.left,y:r.top,vx:0,vy:0,w:r.width,home:null};});
+function captureHomes(){orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.home={x:r.left,y:r.top,w:r.width};o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;});}
+captureHomes();addEventListener('resize',()=>{if(!physics)captureHomes();});
+let physics=false;
+const echoes=document.getElementById('bgm-echoes');const dawn=document.getElementById('bgm-dawn');
+[echoes,dawn].forEach(a=>{if(a)a.volume=0.32;});
+function playMode(){if(physics){if(echoes)echoes.pause();if(dawn)dawn.play().catch(()=>{});}else{if(dawn)dawn.pause();if(echoes)echoes.play().catch(()=>{});}}
+document.getElementById('mode-dot').addEventListener('click',()=>{physics=!physics;document.body.classList.toggle('physics',physics);if(!physics){orbs.forEach(o=>{o.vx=0;o.vy=0;if(o.home){o.x=o.home.x;o.y=o.home.y;}o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}else{orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}playMode();});
+orbs.forEach(o=>{o.el.addEventListener('click',e=>{if(!physics)return;e.preventDefault();e.stopPropagation();const r=o.el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const d=Math.hypot(dx,dy)||1;o.vx=dx/d*7.2;o.vy=dy/d*7.2;});});
+function stepPhysics(){if(!physics)return;const W=innerWidth,H=innerHeight;for(const o of orbs){o.x+=o.vx;o.y+=o.vy;o.vx*=0.992;o.vy*=0.992;if(Math.hypot(o.vx,o.vy)<0.02){o.vx=0;o.vy=0;}if(o.x<0){o.x=0;o.vx=Math.abs(o.vx)*0.86;}if(o.y<0){o.y=0;o.vy=Math.abs(o.vy)*0.86;}if(o.x+o.w>W){o.x=W-o.w;o.vx=-Math.abs(o.vx)*0.86;}if(o.y+o.w>H){o.y=H-o.w;o.vy=-Math.abs(o.vy)*0.86;}}for(let i=0;i<orbs.length;i++){for(let j=i+1;j<orbs.length;j++){const a=orbs[i],b=orbs[j];const ax=a.x+a.w/2,ay=a.y+a.w/2,bx=b.x+b.w/2,by=b.y+b.w/2;const dx=bx-ax,dy=by-ay;const dist=Math.hypot(dx,dy)||0.0001;const min=a.w/2+b.w/2;if(dist<min){const nx=dx/dist,ny=dy/dist,overlap=min-dist,ma=a.w*a.w,mb=b.w*b.w,s=overlap/(ma+mb);a.x-=nx*s*mb;a.y-=ny*s*mb;b.x+=nx*s*ma;b.y+=ny*s*ma;const va=a.vx*nx+a.vy*ny,vb=b.vx*nx+b.vy*ny;const va2=(va*(ma-mb)+2*mb*vb)/(ma+mb),vb2=(vb*(mb-ma)+2*ma*va)/(ma+mb);a.vx+=(va2-va)*nx;a.vy+=(va2-va)*ny;b.vx+=(vb2-vb)*nx;b.vy+=(vb2-vb)*ny;}}}orbs.forEach(o=>{o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}
+const haloEl=document.getElementById('mode-dot');const orbiters=[];const held=[];
+function harvest(){if(mouse.on&&held.length<16){for(const p of particles){if(held.length>=16)break;if(Math.hypot(p.x-mouse.x,p.y-mouse.y)<26){held.push({a:Math.atan2(p.y-mouse.y,p.x-mouse.x),r:10+Math.random()*16,s:.02+Math.random()*.03,gold:p.gold});p.x=Math.random()*gCanvas.width;p.y=Math.random()*gCanvas.height;}}}if(mouse.on){for(const o of held){o.a+=o.s;ctx.beginPath();ctx.arc(mouse.x+Math.cos(o.a)*o.r,mouse.y+Math.sin(o.a)*o.r,o.gold?1.7:1.1,0,Math.PI*2);ctx.fillStyle=o.gold?'#d4af37':'rgba(244,244,245,.85)';ctx.fill();}}if(!haloEl)return;const b=haloEl.getBoundingClientRect();const hx=b.left+b.width/2,hy=b.top+b.height/2;if(mouse.on&&Math.hypot(mouse.x-hx,mouse.y-hy)<46&&held.length){while(held.length){const o=held.pop();o.r=16+Math.random()*20;orbiters.push(o);if(orbiters.length>48)orbiters.shift();}}const grow=Math.min(12,orbiters.length*0.22);haloEl.style.width=haloEl.style.height=(18+grow)+'px';for(const o of orbiters){o.a+=o.s;ctx.beginPath();ctx.arc(hx+Math.cos(o.a)*o.r,hy+Math.sin(o.a)*o.r,o.gold?1.5:0.9,0,Math.PI*2);ctx.fillStyle=o.gold?'#d4af37':'rgba(244,244,245,.75)';ctx.fill();}}
+function shareFrame(name){const out=document.createElement('canvas');out.width=innerWidth;out.height=innerHeight;const c=out.getContext('2d');c.fillStyle='#0a0a0c';c.fillRect(0,0,out.width,out.height);c.drawImage(gCanvas,0,0);document.querySelectorAll('a.orb').forEach(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');if(!img)return;c.save();c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.clip();try{c.drawImage(img,r.left,r.top,r.width,r.height);}catch(e){}c.restore();c.strokeStyle='rgba(212,175,55,.28)';c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.stroke();});c.fillStyle='#a1a1aa';c.textAlign='center';c.font='13px sans-serif';c.fillText('© 2026 Willwi 陳威兒 · Made with sound & silence',innerWidth/2,innerHeight-18);if(name){c.fillStyle='rgba(212,175,55,.72)';c.textAlign='right';c.font='12px sans-serif';c.fillText(name,innerWidth-24,innerHeight-18);}out.toBlob(blob=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='willwi.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/jpeg',0.92);}
+function keepRecord(name,email){fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'starfield',name:name||'',email})}).catch(()=>{});}
+const sign=document.getElementById('sign');const signName=document.getElementById('sign-name');const signEmail=document.getElementById('sign-email');
+document.getElementById('share-dot').addEventListener('click',e=>{e.stopPropagation();sign.classList.add('open');signName.value=localStorage.getItem('willwi-name')||'';signEmail.value='';setTimeout(()=>signName.focus(),40);});
+sign.addEventListener('click',e=>{if(e.target===sign)sign.classList.remove('open');});
+function submitSign(){const name=signName.value.trim();const email=signEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){signEmail.focus();return;}if(name)localStorage.setItem('willwi-name',name);sign.classList.remove('open');keepRecord(name,email);shareFrame(name);}
+signName.addEventListener('keydown',e=>{if(e.key==='Escape')sign.classList.remove('open');if(e.key==='Enter'){e.preventDefault();signEmail.focus();}});
+signEmail.addEventListener('keydown',e=>{if(e.key==='Escape')sign.classList.remove('open');if(e.key==='Enter'){e.preventDefault();submitSign();}});
+function loop(){drawParticles();harvest();stepPhysics();requestAnimationFrame(loop);}loop();
+window.addEventListener('pointerdown',function start(){playMode();window.removeEventListener('pointerdown',start);});
+document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{if(physics)return;e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
+document.querySelectorAll('.layer,.layer-close').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el||el.classList.contains('layer-close'))document.querySelectorAll('.layer').forEach(l=>l.classList.remove('open'));});});
+</script>
+</body>
+</html>
