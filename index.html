@@ -15,6 +15,7 @@
   @keyframes drift-c { 0%,100%{transform:translate(0,0)} 50%{transform:translate(12px,20px)} }
   @keyframes halo { 0%,100%{box-shadow:0 0 16px rgba(212,175,55,.07)} 50%{box-shadow:0 0 34px rgba(212,175,55,.18)} }
   @keyframes spin-slow { from{transform:rotate(0deg) scale(1.12)} to{transform:rotate(360deg) scale(1.12)} }
+  @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.25)} 50%{box-shadow:0 0 0 6px rgba(212,175,55,0)} }
   a.orb { position:absolute; border-radius:50%; overflow:hidden; display:block; pointer-events:auto; text-decoration:none; border:1px solid rgba(212,175,55,.2); background:#070708; will-change:left,top; }
   a.orb img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; filter:brightness(.08) saturate(.15) contrast(1.1); opacity:.55; animation:spin-slow 90s linear infinite; transition: filter .45s ease, opacity .45s ease; }
   a.orb span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(244,244,245,.92); font-size:11px; letter-spacing:.22em; text-transform:uppercase; opacity:0; pointer-events:none; text-shadow:0 2px 12px #000; transition:opacity .35s ease; }
@@ -31,9 +32,9 @@
   .orb-7{width:76px;height:76px;left:58%;top:44%;animation:halo 6.5s ease-in-out infinite,drift-a 17s ease-in-out infinite reverse}
   .orb-8{width:70px;height:70px;left:88%;top:62%;animation:halo 9s ease-in-out infinite,drift-b 21s ease-in-out infinite}
   body.physics a.orb { animation: halo 8s ease-in-out infinite; }
-  #mode-dot { position:fixed; left:18px; bottom:18px; z-index:8; width:8px; height:8px; border-radius:50%; background: rgba(212,175,55,.28); border: 1px solid rgba(212,175,55,.2); cursor:pointer; opacity:.35; transition: opacity .4s, background .4s, box-shadow .4s; }
-  #mode-dot:hover { opacity:.8; }
-  body.physics #mode-dot { opacity:.7; background: rgba(212,175,55,.7); box-shadow: 0 0 10px rgba(212,175,55,.35); }
+  #mode-dot { position:fixed; left:20px; bottom:22px; z-index:8; width:16px; height:16px; padding:0; border-radius:50%; background: rgba(212,175,55,.45); border: 1px solid rgba(212,175,55,.4); cursor:pointer; opacity:.7; animation: pulse-dot 2.8s ease-in-out infinite; transition: opacity .4s, background .4s, box-shadow .4s, transform .3s; }
+  #mode-dot:hover { opacity:1; transform:scale(1.12); }
+  body.physics #mode-dot { opacity:1; background: rgba(212,175,55,.85); box-shadow: 0 0 14px rgba(212,175,55,.45); animation:none; }
   footer { position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;font-size:13px;letter-spacing:.04em;border:0;background:none; }
   .layer{display:none;position:fixed;inset:0;z-index:20;background:rgba(5,5,7,.82);align-items:center;justify-content:center;padding:40px 24px}
   .layer.open{display:flex}
