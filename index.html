@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Willwi</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#0a0a0c">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -35,6 +36,8 @@ body.physics a.orb{animation:halo 8s ease-in-out infinite}
 #mode-dot{position:fixed;left:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
 #share-dot{position:fixed;left:20px;bottom:22px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(212,175,55,.35);border:1px solid rgba(212,175,55,.28);cursor:pointer;opacity:.55}
 #share-dot:hover{opacity:1}
+#guest-tag{position:fixed;left:38px;bottom:16px;z-index:8;font-family:"Great Vibes",cursive;color:rgba(212,175,55,.82);font-size:26px;pointer-events:none;opacity:0;transition:opacity .4s}
+#guest-tag.on{opacity:1}
 #sign{display:none;position:fixed;inset:0;z-index:30;background:rgba(5,5,7,.55);align-items:center;justify-content:center}
 #sign.open{display:flex}
 #sign .sign-box{display:flex;flex-direction:column;gap:18px;align-items:center}
@@ -55,6 +58,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <audio id="bgm-dawn" loop preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
 <button id="mode-dot" type="button"></button>
 <button id="share-dot" type="button"></button>
+<span id="guest-tag"></span>
 <div class="orbs">
 <a class="orb orb-1" href="#layer-about"><img src="assets/images/bk-15.jpg" alt=""><span>ABOUT</span></a>
 <a class="orb orb-2" href="https://metro-bvugldh17-willwi.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-13.jpg" alt=""><span>METRO</span></a>
@@ -68,7 +72,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <div class="layer" id="layer-about"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Willwi 陳威兒</h2><p>來自台灣的創作歌手與音樂製作人。</p></div></div>
 <div class="layer" id="layer-contact"><button class="layer-close" type="button">x</button><div class="layer-card"><p><a href="mailto:info@willwi.com">info@willwi.com</a></p></div></div>
 <form name="starfield" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden><input type="text" name="name"><input type="email" name="email"><input name="bot-field"></form>
-<div id="sign"><div class="sign-box"><input id="sign-name" maxlength="24" autocomplete="name" placeholder="名字"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><p>信箱只用於保存這次星場紀錄，不公開、不寄電子報。</p></div></div>
+<div id="sign"><div class="sign-box"><input id="sign-name" maxlength="24" autocomplete="name" placeholder="name"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><p>信箱只用於保存這次星場紀錄，不公開、不寄電子報。</p></div></div>
 <footer>© 2026 Willwi 陳威兒 · Made with sound & silence</footer>
 <script>
 const gCanvas=document.getElementById('global-particles');const ctx=gCanvas.getContext('2d');
@@ -91,14 +95,17 @@ orbs.forEach(o=>{o.el.addEventListener('click',e=>{if(!physics)return;e.preventD
 function stepPhysics(){if(!physics)return;const W=innerWidth,H=innerHeight;for(const o of orbs){o.x+=o.vx;o.y+=o.vy;o.vx*=0.992;o.vy*=0.992;if(Math.hypot(o.vx,o.vy)<0.02){o.vx=0;o.vy=0;}if(o.x<0){o.x=0;o.vx=Math.abs(o.vx)*0.86;}if(o.y<0){o.y=0;o.vy=Math.abs(o.vy)*0.86;}if(o.x+o.w>W){o.x=W-o.w;o.vx=-Math.abs(o.vx)*0.86;}if(o.y+o.w>H){o.y=H-o.w;o.vy=-Math.abs(o.vy)*0.86;}}for(let i=0;i<orbs.length;i++){for(let j=i+1;j<orbs.length;j++){const a=orbs[i],b=orbs[j];const ax=a.x+a.w/2,ay=a.y+a.w/2,bx=b.x+b.w/2,by=b.y+b.w/2;const dx=bx-ax,dy=by-ay;const dist=Math.hypot(dx,dy)||0.0001;const min=a.w/2+b.w/2;if(dist<min){const nx=dx/dist,ny=dy/dist,overlap=min-dist,ma=a.w*a.w,mb=b.w*b.w,s=overlap/(ma+mb);a.x-=nx*s*mb;a.y-=ny*s*mb;b.x+=nx*s*ma;b.y+=ny*s*ma;const va=a.vx*nx+a.vy*ny,vb=b.vx*nx+b.vy*ny;const va2=(va*(ma-mb)+2*mb*vb)/(ma+mb),vb2=(vb*(mb-ma)+2*ma*va)/(ma+mb);a.vx+=(va2-va)*nx;a.vy+=(va2-va)*ny;b.vx+=(vb2-vb)*nx;b.vy+=(vb2-vb)*ny;}}}orbs.forEach(o=>{o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}
 const haloEl=document.getElementById('mode-dot');const orbiters=[];const held=[];
 function harvest(){if(mouse.on&&held.length<16){for(const p of particles){if(held.length>=16)break;if(Math.hypot(p.x-mouse.x,p.y-mouse.y)<26){held.push({a:Math.atan2(p.y-mouse.y,p.x-mouse.x),r:10+Math.random()*16,s:.02+Math.random()*.03,gold:p.gold});p.x=Math.random()*gCanvas.width;p.y=Math.random()*gCanvas.height;}}}if(mouse.on){for(const o of held){o.a+=o.s;ctx.beginPath();ctx.arc(mouse.x+Math.cos(o.a)*o.r,mouse.y+Math.sin(o.a)*o.r,o.gold?1.7:1.1,0,Math.PI*2);ctx.fillStyle=o.gold?'#d4af37':'rgba(244,244,245,.85)';ctx.fill();}}if(!haloEl)return;const b=haloEl.getBoundingClientRect();const hx=b.left+b.width/2,hy=b.top+b.height/2;if(mouse.on&&Math.hypot(mouse.x-hx,mouse.y-hy)<46&&held.length){while(held.length){const o=held.pop();o.r=16+Math.random()*20;orbiters.push(o);if(orbiters.length>48)orbiters.shift();}}const grow=Math.min(12,orbiters.length*0.22);haloEl.style.width=haloEl.style.height=(18+grow)+'px';for(const o of orbiters){o.a+=o.s;ctx.beginPath();ctx.arc(hx+Math.cos(o.a)*o.r,hy+Math.sin(o.a)*o.r,o.gold?1.5:0.9,0,Math.PI*2);ctx.fillStyle=o.gold?'#d4af37':'rgba(244,244,245,.75)';ctx.fill();}}
-function shareFrame(name){const out=document.createElement('canvas');out.width=innerWidth;out.height=innerHeight;const c=out.getContext('2d');c.fillStyle='#0a0a0c';c.fillRect(0,0,out.width,out.height);c.drawImage(gCanvas,0,0);document.querySelectorAll('a.orb').forEach(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');if(!img)return;c.save();c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.clip();try{c.drawImage(img,r.left,r.top,r.width,r.height);}catch(e){}c.restore();c.strokeStyle='rgba(212,175,55,.28)';c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.stroke();});c.fillStyle='#a1a1aa';c.textAlign='center';c.font='13px sans-serif';c.fillText('© 2026 Willwi 陳威兒 · willwi.com',innerWidth/2,innerHeight-18);if(name){c.fillStyle='rgba(212,175,55,.72)';c.textAlign='right';c.font='12px sans-serif';c.fillText(name,innerWidth-24,innerHeight-18);}out.toBlob(blob=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='willwi.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/jpeg',0.92);}
+function handleOf(n){return '@'+String(n||'').replace(/^@/,'').trim();}
+function showTag(n){const tag=document.getElementById('guest-tag');if(!tag||!n)return;tag.textContent=handleOf(n);tag.classList.add('on');}
+function shareFrame(name){const out=document.createElement('canvas');out.width=innerWidth;out.height=innerHeight;const c=out.getContext('2d');c.fillStyle='#0a0a0c';c.fillRect(0,0,out.width,out.height);c.drawImage(gCanvas,0,0);document.querySelectorAll('a.orb').forEach(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');if(!img)return;c.save();c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.clip();try{c.drawImage(img,r.left,r.top,r.width,r.height);}catch(e){}c.restore();c.strokeStyle='rgba(212,175,55,.28)';c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.stroke();});c.fillStyle='#a1a1aa';c.textAlign='center';c.font='13px sans-serif';c.fillText('© 2026 Willwi 陳威兒 · willwi.com',innerWidth/2,innerHeight-18);if(name){c.fillStyle='rgba(212,175,55,.82)';c.textAlign='left';c.font='26px Great Vibes, cursive';c.fillText(handleOf(name),38,innerHeight-18);}out.toBlob(blob=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='willwi.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/jpeg',0.92);}
 function keepRecord(name,email){fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'starfield',name:name||'',email})}).catch(()=>{});}
 const sign=document.getElementById('sign');const signName=document.getElementById('sign-name');const signEmail=document.getElementById('sign-email');
 document.getElementById('share-dot').addEventListener('click',e=>{e.stopPropagation();sign.classList.add('open');signName.value=localStorage.getItem('willwi-name')||'';signEmail.value='';setTimeout(()=>signName.focus(),40);});
 sign.addEventListener('click',e=>{if(e.target===sign)sign.classList.remove('open');});
-function submitSign(){const name=signName.value.trim();const email=signEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){signEmail.focus();return;}if(name)localStorage.setItem('willwi-name',name);sign.classList.remove('open');keepRecord(name,email);shareFrame(name);}
+function submitSign(){const name=signName.value.trim();const email=signEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){signEmail.focus();return;}if(name){localStorage.setItem('willwi-name',name);showTag(name);}sign.classList.remove('open');keepRecord(name,email);shareFrame(name);}
 signName.addEventListener('keydown',e=>{if(e.key==='Escape')sign.classList.remove('open');if(e.key==='Enter'){e.preventDefault();signEmail.focus();}});
 signEmail.addEventListener('keydown',e=>{if(e.key==='Escape')sign.classList.remove('open');if(e.key==='Enter'){e.preventDefault();submitSign();}});
+const saved=localStorage.getItem('willwi-name');if(saved)showTag(saved);
 function loop(){drawParticles();harvest();stepPhysics();requestAnimationFrame(loop);}loop();
 window.addEventListener('pointerdown',function start(){playMode();window.removeEventListener('pointerdown',start);});
 document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{if(physics)return;e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
