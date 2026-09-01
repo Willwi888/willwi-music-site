@@ -37,11 +37,12 @@ body.physics a.orb{animation:halo 8s ease-in-out infinite}
 #mode-dot{position:fixed;left:20px;bottom:22px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(212,175,55,.45);border:1px solid rgba(212,175,55,.35);cursor:pointer;opacity:.7}
 #note-dot{position:fixed;right:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
 #note-dot:hover{opacity:1}
-#quiet-dot{position:fixed;top:18px;left:18px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(244,244,245,.18);border:1px solid rgba(244,244,245,.2);cursor:pointer;opacity:.4}
-#quiet-dot.on{background:rgba(212,175,55,.35);border-color:rgba(212,175,55,.3)}
+#quiet-dot{position:fixed;top:16px;left:16px;z-index:8;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.4}
+#quiet-dot:hover,#share-line:hover{opacity:.85}
+#quiet-dot svg,#share-line svg{width:20px;height:20px;stroke:#f4f4f5;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#quiet-dot.on{opacity:.28}
+#quiet-dot.on svg{stroke:#a1a1aa}
 #share-line{position:fixed;top:18px;right:18px;z-index:8;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.45}
-#share-line:hover{opacity:.9}
-#share-line svg{width:22px;height:22px;stroke:#f4f4f5;stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
 #guest-tag{position:fixed;left:38px;bottom:16px;z-index:8;font-family:"Great Vibes",cursive;color:rgba(212,175,55,.82);font-size:26px;pointer-events:none;opacity:0;transition:opacity .4s}
 #guest-tag.on{opacity:1}
 #sign{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;background:none}
@@ -65,11 +66,11 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <canvas id="global-particles"></canvas>
 <audio id="bgm-echoes" loop preload="auto" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
 <audio id="bgm-dawn" loop preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
-<button id="quiet-dot" type="button"></button>
+<button id="quiet-dot" type="button" aria-label="quiet"><svg viewBox="0 0 24 24"><path d="M4 12v3a4 4 0 0 0 4 4h1"/><path d="M20 12v3a4 4 0 0 1-4 4h-1"/><path d="M4 12a8 8 0 0 1 16 0"/><rect x="2" y="10" width="4" height="7" rx="1"/><rect x="18" y="10" width="4" height="7" rx="1"/></svg></button>
 <button id="halo-dot" type="button"></button>
 <button id="mode-dot" type="button"></button>
 <button id="note-dot" type="button"></button>
-<button id="share-line" type="button" aria-label="share"><svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></button>
+<button id="share-line" type="button" aria-label="share"><svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg></button>
 <span id="guest-tag"></span>
 <div class="orbs">
 <a class="orb orb-1" href="#layer-about"><img src="assets/images/bk-15.jpg" alt=""><span>ABOUT</span></a>
