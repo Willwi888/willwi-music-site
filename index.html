@@ -37,6 +37,8 @@ body.physics a.orb{animation:halo 8s ease-in-out infinite}
 #mode-dot{position:fixed;left:20px;bottom:22px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(212,175,55,.45);border:1px solid rgba(212,175,55,.35);cursor:pointer;opacity:.7}
 #note-dot{position:fixed;right:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
 #note-dot:hover{opacity:1}
+#quiet-dot{position:fixed;top:18px;left:18px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(244,244,245,.18);border:1px solid rgba(244,244,245,.2);cursor:pointer;opacity:.4}
+#quiet-dot.on{background:rgba(212,175,55,.35);border-color:rgba(212,175,55,.3)}
 #share-line{position:fixed;top:18px;right:18px;z-index:8;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.45}
 #share-line:hover{opacity:.9}
 #share-line svg{width:22px;height:22px;stroke:#f4f4f5;stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -63,6 +65,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <canvas id="global-particles"></canvas>
 <audio id="bgm-echoes" loop preload="auto" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
 <audio id="bgm-dawn" loop preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
+<button id="quiet-dot" type="button"></button>
 <button id="halo-dot" type="button"></button>
 <button id="mode-dot" type="button"></button>
 <button id="note-dot" type="button"></button>
@@ -78,7 +81,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <a class="orb orb-7" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-18.jpg" alt=""><span>WORKS</span></a>
 <a class="orb orb-8" href="assets/images/Credits.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-19.jpg" alt=""><span>CREDITS</span></a>
 </div>
-<div class="layer" id="layer-about"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Willwi 陳威兒</h2><p>來自台灣的創作歌手與音樂製作人。</p><p>八顆是門。第九顆不是門，是站在場裡的人。</p><p>場裡漂的是還沒被寫成歌的東西。黃的少，白的多。黃的靠近你：快樂、未知、好運，願意被認出。白的避開你：日常的噪音，本來就不是要被抓住的。</p><p>所以不是破關。你只是暫時讓少數的黃，從噪音裡走出來。收到第九顆光暈裡的，是這一刻剛好屬於你的部分。沒收到的，明天還在。</p><p>八扇門通往作品。第九顆是你把光帶進場裡。沒有分數。畫面是你站過的證明。</p><p style="color:#71717a;font-size:13px;letter-spacing:.06em">Eight doors. The ninth is whoever is here.<br>Gold comes closer. White stays noise.</p></div></div>
+<div class="layer" id="layer-about"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Willwi 陳威兒</h2><p>創作歌手與音樂製作人。</p><p>八顆是門。第九顆不是門，是站在場裡的人。</p><p>場裡漂的是還沒被寫成歌的東西。黃的少，白的多。</p><p>黃的靠近你：快樂、未知、好運，願意被認出。<br>白的避開你：日常的噪音，本來就不是要被抓住的。</p><p>你只是暫時讓少數的黃，從噪音裡走出來。<br>收到第九顆光暈裡的，是這一刻剛好屬於你的部分。<br>沒收到的，明天還在。</p><p>八扇門通往作品。<br>第九顆是你把光帶進場裡。<br>沒有分數。畫面是你站過的證明。</p><p>場的兩端，還有東西等你碰。</p><p style="color:#71717a;font-size:13px;letter-spacing:.06em">Eight doors. The ninth is whoever is here.<br>Gold comes closer. White stays noise.</p></div></div>
 <div class="layer" id="layer-contact"><button class="layer-close" type="button">x</button><div class="layer-card"><p><a href="mailto:info@willwi.com">info@willwi.com</a></p></div></div>
 <div id="sign"><div class="sign-box"><input id="sign-name" maxlength="24" autocomplete="name" placeholder="name"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><label class="opt"><input id="sign-notify" type="checkbox"> Notify me about new works and events</label><p>信箱只用於保存這次星場紀錄，不公開、不寄電子報。</p></div></div>
 <footer>© 2026 Willwi 陳威兒 · Made with sound & silence</footer>
@@ -97,7 +100,10 @@ captureHomes();addEventListener('resize',()=>{if(!physics)captureHomes();});
 let physics=false;
 const echoes=document.getElementById('bgm-echoes');const dawn=document.getElementById('bgm-dawn');
 [echoes,dawn].forEach(a=>{if(a)a.volume=0.32;});
-function playMode(){if(physics){if(echoes)echoes.pause();if(dawn)dawn.play().catch(()=>{});}else{if(dawn)dawn.pause();if(echoes)echoes.play().catch(()=>{});}}
+let quiet=localStorage.getItem('willwi-quiet')==='1';
+function applyQuiet(){[echoes,dawn].forEach(a=>{if(a)a.muted=quiet;});const q=document.getElementById('quiet-dot');if(q)q.classList.toggle('on',quiet);}
+function playMode(){applyQuiet();if(physics){if(echoes)echoes.pause();if(dawn)dawn.play().catch(()=>{});}else{if(dawn)dawn.pause();if(echoes)echoes.play().catch(()=>{});}}
+document.getElementById('quiet-dot').addEventListener('click',e=>{e.stopPropagation();quiet=!quiet;localStorage.setItem('willwi-quiet',quiet?'1':'0');applyQuiet();});
 function togglePhysics(){physics=!physics;document.body.classList.toggle('physics',physics);if(!physics){orbs.forEach(o=>{o.vx=0;o.vy=0;if(o.home){o.x=o.home.x;o.y=o.home.y;}o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}else{orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}playMode();}
 document.getElementById('mode-dot').addEventListener('click',e=>{e.stopPropagation();togglePhysics();});
 document.getElementById('halo-dot').addEventListener('click',e=>{e.stopPropagation();togglePhysics();});
@@ -121,6 +127,7 @@ sign.addEventListener('click',e=>{if(e.target===sign){sign.classList.remove('ope
 function submitSign(){const name=signName.value.trim();const email=signEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){signEmail.focus();return;}if(name){localStorage.setItem('willwi-name',name);showTag(name);}sign.classList.remove('open');paused=false;keepRecord(name,email,document.getElementById('sign-notify')?.checked);}
 signName.addEventListener('keydown',e=>{if(e.key==='Escape'){sign.classList.remove('open');paused=false;}if(e.key==='Enter'){e.preventDefault();signEmail.focus();}});
 signEmail.addEventListener('keydown',e=>{if(e.key==='Escape'){sign.classList.remove('open');paused=false;}if(e.key==='Enter'){e.preventDefault();submitSign();}});
+applyQuiet();
 const saved=localStorage.getItem('willwi-name');if(saved)showTag(saved);
 function loop(){if(!paused){drawParticles();harvest();}stepPhysics();requestAnimationFrame(loop);}loop();
 window.addEventListener('pointerdown',function start(){playMode();window.removeEventListener('pointerdown',start);});
