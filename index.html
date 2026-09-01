@@ -33,7 +33,7 @@ a.orb:hover span{opacity:1}
 .orb-7{width:76px;height:76px;left:58%;top:44%;animation:halo 6.5s ease-in-out infinite,drift-a 17s ease-in-out infinite reverse}
 .orb-8{width:70px;height:70px;left:88%;top:62%;animation:halo 9s ease-in-out infinite,drift-b 21s ease-in-out infinite}
 body.physics a.orb{animation:halo 8s ease-in-out infinite}
-#halo-dot{position:fixed;left:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);pointer-events:none;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
+#halo-dot{position:fixed;left:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
 #mode-dot{position:fixed;left:20px;bottom:22px;z-index:8;width:10px;height:10px;padding:0;border-radius:50%;background:rgba(212,175,55,.45);border:1px solid rgba(212,175,55,.35);cursor:pointer;opacity:.7}
 #note-dot{position:fixed;right:22px;top:48%;z-index:8;width:18px;height:18px;padding:0;border-radius:50%;background:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.45);cursor:pointer;opacity:.75;animation:pulse-dot 2.8s ease-in-out infinite}
 #note-dot:hover{opacity:1}
@@ -63,7 +63,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <canvas id="global-particles"></canvas>
 <audio id="bgm-echoes" loop preload="auto" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
 <audio id="bgm-dawn" loop preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
-<button id="halo-dot" type="button" tabindex="-1"></button>
+<button id="halo-dot" type="button"></button>
 <button id="mode-dot" type="button"></button>
 <button id="note-dot" type="button"></button>
 <button id="share-line" type="button" aria-label="share"><svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></button>
@@ -98,7 +98,9 @@ let physics=false;
 const echoes=document.getElementById('bgm-echoes');const dawn=document.getElementById('bgm-dawn');
 [echoes,dawn].forEach(a=>{if(a)a.volume=0.32;});
 function playMode(){if(physics){if(echoes)echoes.pause();if(dawn)dawn.play().catch(()=>{});}else{if(dawn)dawn.pause();if(echoes)echoes.play().catch(()=>{});}}
-document.getElementById('mode-dot').addEventListener('click',()=>{physics=!physics;document.body.classList.toggle('physics',physics);if(!physics){orbs.forEach(o=>{o.vx=0;o.vy=0;if(o.home){o.x=o.home.x;o.y=o.home.y;}o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}else{orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}playMode();});
+function togglePhysics(){physics=!physics;document.body.classList.toggle('physics',physics);if(!physics){orbs.forEach(o=>{o.vx=0;o.vy=0;if(o.home){o.x=o.home.x;o.y=o.home.y;}o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}else{orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}playMode();}
+document.getElementById('mode-dot').addEventListener('click',e=>{e.stopPropagation();togglePhysics();});
+document.getElementById('halo-dot').addEventListener('click',e=>{e.stopPropagation();togglePhysics();});
 orbs.forEach(o=>{o.el.addEventListener('click',e=>{if(!physics)return;e.preventDefault();e.stopPropagation();const r=o.el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const d=Math.hypot(dx,dy)||1;o.vx=dx/d*7.2;o.vy=dy/d*7.2;});});
 function stepPhysics(){if(!physics)return;const W=innerWidth,H=innerHeight;for(const o of orbs){o.x+=o.vx;o.y+=o.vy;o.vx*=0.992;o.vy*=0.992;if(Math.hypot(o.vx,o.vy)<0.02){o.vx=0;o.vy=0;}if(o.x<0){o.x=0;o.vx=Math.abs(o.vx)*0.86;}if(o.y<0){o.y=0;o.vy=Math.abs(o.vy)*0.86;}if(o.x+o.w>W){o.x=W-o.w;o.vx=-Math.abs(o.vx)*0.86;}if(o.y+o.w>H){o.y=H-o.w;o.vy=-Math.abs(o.vy)*0.86;}}for(let i=0;i<orbs.length;i++){for(let j=i+1;j<orbs.length;j++){const a=orbs[i],b=orbs[j];const ax=a.x+a.w/2,ay=a.y+a.w/2,bx=b.x+b.w/2,by=b.y+b.w/2;const dx=bx-ax,dy=by-ay;const dist=Math.hypot(dx,dy)||0.0001;const min=a.w/2+b.w/2;if(dist<min){const nx=dx/dist,ny=dy/dist,overlap=min-dist,ma=a.w*a.w,mb=b.w*b.w,s=overlap/(ma+mb);a.x-=nx*s*mb;a.y-=ny*s*mb;b.x+=nx*s*ma;b.y+=ny*s*ma;const va=a.vx*nx+a.vy*ny,vb=b.vx*nx+b.vy*ny;const va2=(va*(ma-mb)+2*mb*vb)/(ma+mb),vb2=(vb*(mb-ma)+2*ma*va)/(ma+mb);a.vx+=(va2-va)*nx;a.vy+=(va2-va)*ny;b.vx+=(vb2-vb)*nx;b.vy+=(vb2-vb)*ny;}}}orbs.forEach(o=>{o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}
 const haloEl=document.getElementById('halo-dot');const orbiters=[];const held=[];
