@@ -60,6 +60,16 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 .layer-card p{margin:0 0 14px}
 .layer-card a{color:#d4af37;text-decoration:none}
 .layer-close{position:absolute;top:24px;right:28px;color:#a1a1aa;font-size:22px;cursor:pointer;background:none;border:0}
+#overture{position:fixed;inset:0;z-index:25;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;opacity:0;gap:18px}
+#overture.on{opacity:1}
+#overture.off{opacity:0;transition:opacity 1.1s ease}
+#overture p{color:#e7e5e4;font-weight:300;letter-spacing:.16em;font-size:clamp(15px,2.1vw,20px);line-height:1.8;opacity:0;transform:translateY(10px);max-width:22em}
+#overture.on p{animation:rise-line 1.2s ease forwards}
+#overture.on p:nth-child(1){animation-delay:.1s;font-size:clamp(28px,4vw,42px);letter-spacing:.22em}
+#overture.on p:nth-child(2){animation-delay:.45s}
+#overture.on p:nth-child(3){animation-delay:.8s}
+#overture.on p:nth-child(4){animation-delay:1.15s;color:#a1a1aa;font-size:14px;letter-spacing:.12em}
+@keyframes rise-line{to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -72,6 +82,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <button id="note-dot" type="button"></button>
 <button id="share-line" type="button" aria-label="share"><svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg></button>
 <span id="guest-tag"></span>
+<div id="overture"><p>Willwi</p><p>Eight doors. The ninth is whoever is here.</p><p>Gold comes closer. White stays noise.</p><p>The field has two ends.</p></div>
 <div class="orbs">
 <a class="orb orb-1" href="#layer-about"><img src="assets/images/bk-15.jpg" alt=""><span>ABOUT</span></a>
 <a class="orb orb-2" href="https://metro-bvugldh17-willwi.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-13.jpg" alt=""><span>METRO</span></a>
@@ -131,7 +142,9 @@ signEmail.addEventListener('keydown',e=>{if(e.key==='Escape'){sign.classList.rem
 applyQuiet();
 const saved=localStorage.getItem('willwi-name');if(saved)showTag(saved);
 function loop(){if(!paused){drawParticles();harvest();}stepPhysics();requestAnimationFrame(loop);}loop();
-window.addEventListener('pointerdown',function start(){playMode();window.removeEventListener('pointerdown',start);});
+let overturePlayed=false;
+function playOverture(){if(overturePlayed)return;overturePlayed=true;const ov=document.getElementById('overture');if(!ov)return;ov.classList.add('on');setTimeout(()=>{ov.classList.add('off');setTimeout(()=>ov.remove(),1200);},3000);}
+window.addEventListener('pointerdown',function start(e){playMode();if(!e.target.closest('button,a,.layer,#sign'))playOverture();window.removeEventListener('pointerdown',start);});
 document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{if(physics)return;e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
 document.querySelectorAll('.layer,.layer-close').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el||el.classList.contains('layer-close'))document.querySelectorAll('.layer').forEach(l=>l.classList.remove('open'));});});
 </script>
