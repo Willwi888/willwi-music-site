@@ -6,6 +6,10 @@
 <title>Willwi</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#0a0a0c">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Willwi">
+<link rel="apple-touch-icon" href="assets/images/Logo-1.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:#0a0a0c;color:#a1a1aa;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
@@ -99,7 +103,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <a class="orb orb-4" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-14.jpg" alt=""><span>ARCHIVE</span></a>
 <a class="orb orb-5" href="#layer-contact"><img src="assets/images/bk-12.jpg" alt=""><span>CONTACT</span></a>
 <a class="orb orb-6" href="#layer-about"><img src="assets/images/bk-17.jpg" alt=""><span>WILLWI</span></a>
-<a class="orb orb-7" href="https://willwi-music-db-j3h8.vercel.app" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-18.jpg" alt=""><span>WORKS</span></a>
+<a class="orb orb-7" href="https://www.youtube.com/@Willwi" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-18.jpg" alt=""><span>NOODLE</span></a>
 <a class="orb orb-8" href="assets/images/Credits.jpg" target="_blank" rel="noopener noreferrer"><img src="assets/images/bk-19.jpg" alt=""><span>CREDITS</span></a>
 </div>
 <div class="layer" id="layer-about"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Willwi 陳威兒</h2><p>創作歌手與音樂製作人。</p><p>八顆是門。第九顆不是門，是站在場裡的人。</p><p>場裡漂的是還沒被寫成歌的東西。黃的少，白的多。</p><p>黃的靠近你：快樂、未知、好運，願意被認出。<br>白的避開你：日常的噪音，本來就不是要被抓住的。</p><p>你只是暫時讓少數的黃，從噪音裡走出來。<br>收到第九顆光暈裡的，是這一刻剛好屬於你的部分。<br>沒收到的，明天還在。</p><p>八扇門通往作品。<br>第九顆是你把光帶進場裡。<br>沒有分數。畫面是你站過的證明。</p><p>場的兩端，還有東西等你碰。</p><p style="color:#71717a;font-size:13px;letter-spacing:.06em">Eight doors. The ninth is whoever is here.<br>Gold comes closer. White stays noise.</p></div></div>
@@ -161,6 +165,7 @@ window.addEventListener('pointerdown',function start(e){playMode();if(!e.target.
 document.addEventListener('pointerdown',e=>{if(sign.classList.contains('open')&&!e.target.closest('#sign,.sign-box,#note-dot')){sign.classList.remove('open');paused=false;}});
 document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{if(physics)return;e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
 document.querySelectorAll('.layer,.layer-close').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el||el.classList.contains('layer-close'))document.querySelectorAll('.layer').forEach(l=>l.classList.remove('open'));});});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
