@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Record · Willwi</title>
+<meta name="theme-color" content="#efe8dc">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#cfc6b8;color:#2b3044;font-family:Georgia,"Times New Roman","PingFang TC","Microsoft JhengHei",serif}
+#dust{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+main{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+.sheet{width:min(720px,100%);background:#f6f1e8;padding:48px 44px 56px;box-shadow:0 24px 80px rgba(20,16,12,.18);animation:rise 1.1s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.kicker{letter-spacing:.28em;font-size:11px;color:#8a6b73;text-transform:uppercase;margin-bottom:28px}
+h1{font-weight:400;font-size:clamp(40px,7vw,64px);color:#1d2440;margin-bottom:18px}
+.role{font-size:16px;margin-bottom:22px}
+.lead{font-size:17px;line-height:1.8;color:#3a4058;margin-bottom:36px;max-width:36em}
+.years{display:flex;flex-direction:column;gap:22px}
+.years article{opacity:0;animation:rise .8s ease forwards}
+.years article:nth-child(1){animation-delay:.15s}
+.years article:nth-child(2){animation-delay:.28s}
+.years article:nth-child(3){animation-delay:.41s}
+.years article:nth-child(4){animation-delay:.54s}
+.years article:nth-child(5){animation-delay:.67s}
+.years b{display:block;font-size:13px;letter-spacing:.14em;color:#8a6b73;font-weight:500;margin-bottom:6px}
+.years p{line-height:1.75;color:#2f354c}
+.back{display:inline-block;margin-top:40px;color:#8a6b73;text-decoration:none;letter-spacing:.12em;font-size:12px}
+.back:hover{color:#1d2440}
+</style>
+</head>
+<body>
+<canvas id="dust"></canvas>
+<main>
+<section class="sheet">
+<p class="kicker">Public Record · 2016–2026</p>
+<h1>Artist Willwi</h1>
+<p class="role">Artist · Songwriter · Music Producer</p>
+<p class="lead">A public record of creative work, professional credits, and the ten years that led back to a name.</p>
+<div class="years">
+<article><b>2016</b><p>Entered the recording industry. Learned the rooms behind the songs.</p></article>
+<article><b>2018</b><p>First appearance in international credit databases. The paper trail begins.</p></article>
+<article><b>2019–2024</b><p>Songwriting, production, and collaborative work across years that did not always carry the name on the door.</p></article>
+<article><b>2025</b><p>Returned as Willwi. An independent recording chapter.</p></article>
+<article><b>2026</b><p>Release of the self-titled work WILLWI. The record becomes public in full.</p></article>
+</div>
+<a class="back" href="./index.html">← the field</a>
+</section>
+</main>
+<script>
+const c=document.getElementById('dust'),x=c.getContext('2d');
+function size(){c.width=innerWidth;c.height=innerHeight;}size();addEventListener('resize',size);
+const n=Math.min(90,Math.floor(innerWidth*innerHeight/18000));
+const p=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,v:.12+Math.random()*.28,r:.4+Math.random()*1.3,g:Math.random()<.35}));
+(function loop(){x.clearRect(0,0,c.width,c.height);for(const o of p){o.y-=o.v;if(o.y<-4){o.y=c.height+4;o.x=Math.random()*c.width;}x.beginPath();x.arc(o.x,o.y,o.r,0,Math.PI*2);x.fillStyle=o.g?'rgba(184,150,70,.28)':'rgba(255,255,255,.22)';x.fill();}requestAnimationFrame(loop);})();
+</script>
+</body>
+</html>
