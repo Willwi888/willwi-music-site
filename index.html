@@ -69,7 +69,15 @@ a.orb span{font-size:8px;letter-spacing:.12em}
 #quiet-dot{position:fixed;top:16px;left:16px;z-index:8;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.4}
 #quiet-dot:hover,#share-line:hover{opacity:.85}
 #quiet-dot svg,#share-line svg{width:20px;height:20px;stroke:#f4f4f5;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-#quiet-dot.on{opacity:.28}
+#quiet-dot.on{opacity:.22}
+#quiet-dot,#halo-dot,#note-dot,#share-line{opacity:.2;transition:opacity .35s}
+#quiet-dot:hover,#halo-dot:hover,#note-dot:hover,#share-line:hover,
+#quiet-dot.on-hint,#halo-dot.on-hint,#note-dot.on-hint,#share-line.on-hint{opacity:.9}
+.cue{position:fixed;z-index:9;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,55,.62);opacity:0;pointer-events:none;transition:opacity .4s;white-space:nowrap}
+.cue.on{opacity:1}
+#sign .keep{background:none;border:0;color:rgba(212,175,55,.7);letter-spacing:.28em;font-size:11px;text-transform:uppercase;cursor:pointer;padding:10px 4px}
+#sign input:-webkit-autofill,#sign input:-webkit-autofill:hover,#sign input:-webkit-autofill:focus{-webkit-text-fill-color:#efe8dc;-webkit-box-shadow:0 0 0 40px #0a0a0c inset;caret-color:#efe8dc}
+
 #quiet-dot.on svg{stroke:#a1a1aa}
 #share-line{position:fixed;top:18px;right:18px;z-index:8;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.45}
 #guest-tag{position:fixed;left:38px;bottom:16px;z-index:8;font-family:"Great Vibes",cursive;color:rgba(212,175,55,.82);font-size:26px;pointer-events:none;opacity:0;transition:opacity .4s}
@@ -107,13 +115,18 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 </head>
 <body>
 <canvas id="global-particles"></canvas>
-<audio id="bgm-echoes" loop playsinline webkit-playsinline preload="auto" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
-<audio id="bgm-dawn" loop playsinline webkit-playsinline preload="auto" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
+<audio id="bgm-echoes" loop playsinline webkit-playsinline preload="metadata" src="https://www.dropbox.com/scl/fi/olonc5hxopjzeuj2s4rtx/EchoesQT6E52543776.mp3?rlkey=qf9yjqcfumios72tzjd3t85qz&st=9fkb4pw9&dl=1"></audio>
+<audio id="bgm-dawn" loop playsinline webkit-playsinline preload="metadata" src="https://www.dropbox.com/scl/fi/ckiv2bne34u8d8hl1vos4/Cosmic-DawnQT6E52543777.mp3?rlkey=rowkhynnbnb3q1iz7rhtqwie9&st=zclszuwq&dl=1"></audio>
 <button id="quiet-dot" type="button" aria-label="quiet"><svg viewBox="0 0 24 24"><path d="M4 12v3a4 4 0 0 0 4 4h1"/><path d="M20 12v3a4 4 0 0 1-4 4h-1"/><path d="M4 12a8 8 0 0 1 16 0"/><rect x="2" y="10" width="4" height="7" rx="1"/><rect x="18" y="10" width="4" height="7" rx="1"/></svg></button>
 <span id="halo-dot" role="button"></span>
 <span id="note-dot" role="button"></span>
 <button id="share-line" type="button" aria-label="share"><svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg></button>
 <span id="guest-tag"></span>
+<span class="cue" id="cue-quiet">sound</span>
+<span class="cue" id="cue-share">share this frame</span>
+<span class="cue" id="cue-halo">billiards</span>
+<span class="cue" id="cue-note">leave a name</span>
+
 <div id="overture"><p>Eight doors. The ninth is whoever is here.</p><p>Gold comes closer. White stays noise.</p></div>
 <div class="orbs">
 <a class="orb orb-1" href="#layer-about"><img src="assets/images/bk-15.jpg" alt=""><span>ABOUT</span></a>
@@ -129,7 +142,7 @@ footer{position:fixed;left:0;right:0;bottom:16px;z-index:3;text-align:center;fon
 <div class="layer" id="layer-keep"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>Keep the field</h2><p>場可以進來。這三件事要支持。</p><div class="qr-grid"><figure><img class="qr" src="assets/images/qr-metro.png" alt="手工對歌詞 320"><figcaption>對時 · 320</figcaption></figure><figure><img class="qr" src="assets/images/qr-listen.png" alt="支持音樂創作"><figcaption>聆聽</figcaption></figure><figure><img class="qr" src="assets/images/qr-film.png" alt="動態影片 2800"><figcaption>動態影片 · 2800</figcaption></figure><figure><img class="qr" src="assets/images/qr-line.jpg" alt="官方 LINE"><figcaption>付完加 LINE 拿口令</figcaption></figure></div><p>掃 PayPal 碼之後加官方 LINE，口令只開一次。</p></div></div>
 <div class="layer" id="layer-noodle"><button class="layer-close" type="button">x</button><div class="layer-card"><h2>泡麵聲學院</h2><p>影音館留在場裡。</p><p>點歌的人把一首歌交給這裡。<br>翻唱裡有我自己的聲音，所以它不是導流出去的連結，是還在場內的對話。</p><p>大的影音放在自己的資料庫，不放進這個網站的資料夾。<br>門只負責打開這間屋子。</p></div></div>
 <div class="layer" id="layer-contact"><button class="layer-close" type="button">x</button><div class="layer-card"><p><a href="mailto:info@willwi.com">info@willwi.com</a></p></div></div>
-<div id="sign"><div class="sign-box"><p class="sign-line">This frame is yours.</p><p class="sign-line dim">You heard it, so it existed.</p><input id="sign-name" maxlength="24" autocomplete="name" placeholder="name"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><label class="opt"><input id="sign-notify" type="checkbox"> Notify me about new works and events</label><p>Email keeps this frame. It stays private.</p></div></div>
+<div id="sign"><div class="sign-box"><p class="sign-line">This frame is yours.</p><p class="sign-line dim">You heard it, so it existed.</p><input id="sign-name" maxlength="24" autocomplete="name" placeholder="name"><input id="sign-email" type="email" autocomplete="email" placeholder="email"><label class="opt"><input id="sign-notify" type="checkbox"> Notify me about new works and events</label><p>Email keeps this frame. It stays private.</p><button class="keep" type="button" id="sign-keep">Keep</button></div></div>
 <footer>© 2026 Willwi 陳威兒 · Made with sound & silence</footer>
 <script>
 const gCanvas=document.getElementById('global-particles');const ctx=gCanvas.getContext('2d');
@@ -150,11 +163,21 @@ function captureHomes(){orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.
 captureHomes();addEventListener('resize',()=>{if(!physics)captureHomes();});
 let physics=false;
 const echoes=document.getElementById('bgm-echoes');const dawn=document.getElementById('bgm-dawn');
-let quiet=localStorage.getItem('willwi-quiet')==='1';
+const coarse=matchMedia('(pointer:coarse)').matches||/Mobi|Android|iPhone|iPad|WeChat|MicroMessenger/i.test(navigator.userAgent);
+let quiet=coarse?false:localStorage.getItem('willwi-quiet')==='1';
 [echoes,dawn].forEach(a=>{if(!a)return;a.volume=0.32;a.muted=!!quiet;a.playsInline=true;a.setAttribute('playsinline','');a.setAttribute('webkit-playsinline','');});
 function applyQuiet(){[echoes,dawn].forEach(a=>{if(a)a.muted=quiet;});const q=document.getElementById('quiet-dot');if(q)q.classList.toggle('on',quiet);}
-function playMode(){applyQuiet();const on=physics?dawn:echoes;const off=physics?echoes:dawn;if(off)off.pause();if(on&&!quiet){on.muted=false;on.volume=0.32;const p=on.play();if(p)p.catch(()=>{try{on.currentTime=0;}catch(e){}on.play().catch(()=>{});});}}
-document.getElementById('quiet-dot').addEventListener('click',e=>{e.stopPropagation();quiet=!quiet;localStorage.setItem('willwi-quiet',quiet?'1':'0');applyQuiet();});
+function isPlaying(a){return a&&!a.paused&&!a.ended&&a.currentTime>0;}
+function playSafe(a){if(!a||quiet)return;a.muted=false;a.volume=0.36;if(isPlaying(a))return;a.play().catch(()=>{});}
+function playMode(){
+applyQuiet();
+const bed=physics?dawn:echoes;
+const off=physics?echoes:dawn;
+if(quiet){[echoes,dawn].forEach(a=>{if(a)a.pause();});return;}
+if(off&&isPlaying(off))off.pause();
+playSafe(bed);
+}
+document.getElementById('quiet-dot').addEventListener('click',e=>{e.stopPropagation();quiet=!quiet;localStorage.setItem('willwi-quiet',quiet?'1':'0');playMode();});
 function togglePhysics(){physics=!physics;document.body.classList.toggle('physics',physics);if(!physics){orbs.forEach(o=>{o.vx=0;o.vy=0;if(o.home){o.x=o.home.x;o.y=o.home.y;}o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}else{orbs.forEach(o=>{const r=o.el.getBoundingClientRect();o.x=r.left;o.y=r.top;o.w=r.width;o.vx=0;o.vy=0;o.el.style.left=o.x+'px';o.el.style.top=o.y+'px';});}playMode();}
 document.getElementById('halo-dot').addEventListener('click',e=>{e.stopPropagation();togglePhysics();});
 let aim=null;
@@ -185,25 +208,38 @@ function handleOf(n){return '@'+String(n||'').replace(/^@/,'').trim();}
 function showTag(n){const tag=document.getElementById('guest-tag');if(!tag||!n)return;tag.textContent=handleOf(n);tag.classList.add('on');}
 
 function freezeNow(){mouse.on=false;frozen=document.createElement('canvas');frozen.width=gCanvas.width;frozen.height=gCanvas.height;frozen.getContext('2d').drawImage(gCanvas,0,0);frozenOrbs=[...document.querySelectorAll('a.orb')].map(el=>{const r=el.getBoundingClientRect();const img=el.querySelector('img');const cs=img?getComputedStyle(img):null;return{r,img,filter:cs?cs.filter:'none',opacity:cs?parseFloat(cs.opacity):1};});}
-function shareFrame(name){const src=frozen||gCanvas;const list=frozenOrbs.length?frozenOrbs:[];const out=document.createElement('canvas');out.width=innerWidth;out.height=innerHeight;const c=out.getContext('2d');c.fillStyle='#0a0a0c';c.fillRect(0,0,out.width,out.height);c.drawImage(src,0,0);list.forEach(o=>{if(!o.img)return;const r=o.r;c.save();c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.clip();c.filter=o.filter||'none';c.globalAlpha=isFinite(o.opacity)?o.opacity:1;try{c.drawImage(o.img,r.left,r.top,r.width,r.height);}catch(e){}c.restore();c.strokeStyle='rgba(212,175,55,.28)';c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.stroke();});c.fillStyle='rgba(161,161,170,.85)';c.textAlign='center';c.font='13px sans-serif';c.fillText('© 2026 Willwi 陳威兒 · Made with sound & silence',innerWidth/2,innerHeight-18);c.fillStyle='rgba(212,175,55,.55)';c.font='12px sans-serif';c.fillText('world.willwi.com',innerWidth/2,innerHeight-36);if(name){c.fillStyle='rgba(212,175,55,.82)';c.textAlign='left';c.font='26px Great Vibes, cursive';c.fillText(handleOf(name),38,innerHeight-18);}out.toBlob(async blob=>{if(!blob)return;const file=new File([blob],'willwi.jpg',{type:'image/jpeg'});const mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);const caption='This frame is yours.\nworld.willwi.com';try{if(mobile&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Willwi',text:caption});return;}}catch(e){if(e&&e.name==='AbortError')return;}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='willwi.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/jpeg',0.92);}
+function shareFrame(name){const src=frozen||gCanvas;const list=frozenOrbs.length?frozenOrbs:[];const out=document.createElement('canvas');out.width=innerWidth;out.height=innerHeight;const c=out.getContext('2d');c.fillStyle='#0a0a0c';c.fillRect(0,0,out.width,out.height);c.drawImage(src,0,0);list.forEach(o=>{if(!o.img)return;const r=o.r;c.save();c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.clip();c.filter=o.filter||'none';c.globalAlpha=isFinite(o.opacity)?o.opacity:1;try{c.drawImage(o.img,r.left,r.top,r.width,r.height);}catch(e){}c.restore();c.strokeStyle='rgba(212,175,55,.28)';c.beginPath();c.arc(r.left+r.width/2,r.top+r.height/2,r.width/2,0,Math.PI*2);c.stroke();});c.fillStyle='rgba(161,161,170,.85)';c.textAlign='center';c.font='13px sans-serif';c.fillText('© 2026 Willwi 陳威兒 · Made with sound & silence',innerWidth/2,innerHeight-18);c.fillStyle='rgba(212,175,55,.55)';c.font='12px sans-serif';c.fillText('world.willwi.com',innerWidth/2,innerHeight-36);if(name){c.fillStyle='rgba(212,175,55,.82)';c.textAlign='left';c.font='26px Great Vibes, cursive';c.fillText(handleOf(name),38,innerHeight-18);}out.toBlob(async blob=>{if(!blob)return;const caption='You saw it because you were here.\nhttps://world.willwi.com/';const ua=navigator.userAgent||'';const line=/Line\//i.test(ua)||/MicroMessenger/i.test(ua);try{if(navigator.share){if(!line&&blob&&navigator.canShare){const file=new File([blob],'willwi.jpg',{type:'image/jpeg'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Willwi',text:caption});return;}}await navigator.share({title:'Willwi',text:caption,url:'https://world.willwi.com/'});return;}}catch(e){if(e&&e.name==='AbortError')return;}try{await navigator.clipboard.writeText('https://world.willwi.com/');}catch(err){}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='willwi.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/jpeg',0.92);}
 function keepRecord(name,email,notify){fetch('https://txopdjcffwkuzfwelpxl.supabase.co/rest/v1/starfield',{method:'POST',headers:{apikey:'sb_publishable_PWjElcsW7fCJHW-xnJWIiQ_u_GAT2cH',Authorization:'Bearer sb_publishable_PWjElcsW7fCJHW-xnJWIiQ_u_GAT2cH','Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({name:name||'',email,notify:!!notify})}).catch(()=>{});}
 const sign=document.getElementById('sign');const signName=document.getElementById('sign-name');const signEmail=document.getElementById('sign-email');
 document.getElementById('share-line').addEventListener('pointerenter',()=>{mouse.on=false;});
 document.getElementById('note-dot').addEventListener('pointerenter',()=>{mouse.on=false;});
 function openSign(thenShare){paused=true;mouse.on=false;freezeNow();sign.dataset.share=thenShare?'1':'0';sign.classList.add('open');signName.value=localStorage.getItem('willwi-name')||'';signEmail.value=localStorage.getItem('willwi-email')||'';const n=document.getElementById('sign-notify');if(n)n.checked=false;setTimeout(()=>signName.focus(),40);}
-document.getElementById('share-line').addEventListener('click',e=>{e.stopPropagation();const name=localStorage.getItem('willwi-name')||'';const mail=localStorage.getItem('willwi-email')||'';if(name&&mail){paused=true;mouse.on=false;freezeNow();shareFrame(name);setTimeout(()=>paused=false,400);}else openSign(true);});
+function placeCue(el,cue,side){if(!el||!cue)return;const r=el.getBoundingClientRect();cue.style.top=(r.top+r.height/2-6)+'px';cue.style.left=side==='left'?(r.right+10)+'px':(side==='right'?(r.left-10-cue.offsetWidth)+'px':(r.left+r.width/2-cue.offsetWidth/2)+'px');if(side==='right')cue.style.left=(r.left-14-Math.max(cue.offsetWidth,80))+'px';}
+function flashCue(el,cue,side){placeCue(el,cue,side);el.classList.add('on-hint');cue.classList.add('on');clearTimeout(cue._t);cue._t=setTimeout(()=>{cue.classList.remove('on');el.classList.remove('on-hint');},2600);}
+const quietEl=document.getElementById('quiet-dot');
+const shareEl=document.getElementById('share-line');
+const haloEl2=document.getElementById('halo-dot');
+const noteEl=document.getElementById('note-dot');
+[[quietEl,'cue-quiet','left'],[shareEl,'cue-share','right'],[haloEl2,'cue-halo','left'],[noteEl,'cue-note','right']].forEach(([el,id,side])=>{if(!el)return;const cue=document.getElementById(id);el.addEventListener('pointerenter',()=>flashCue(el,cue,side));el.addEventListener('pointerdown',()=>flashCue(el,cue,side));});
+function doShare(){const name=localStorage.getItem('willwi-name')||'';const mail=localStorage.getItem('willwi-email')||'';if(name&&mail){paused=true;mouse.on=false;freezeNow();shareFrame(name);setTimeout(()=>paused=false,400);}else openSign(true);}
+shareEl.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();doShare();});
+
 document.getElementById('note-dot').addEventListener('click',e=>{e.stopPropagation();openSign(false);});
 sign.addEventListener('click',e=>{if(e.target===sign){sign.classList.remove('open');paused=false;}});
 function submitSign(){const name=signName.value.trim();const email=signEmail.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){signEmail.focus();return;}localStorage.setItem('willwi-name',name);localStorage.setItem('willwi-email',email);if(name)showTag(name);const wantShare=sign.dataset.share==='1';sign.classList.remove('open');sign.dataset.share='0';paused=false;keepRecord(name,email,document.getElementById('sign-notify')?.checked);if(wantShare){paused=true;mouse.on=false;freezeNow();shareFrame(name);setTimeout(()=>paused=false,400);}}
 signName.addEventListener('keydown',e=>{if(e.key==='Escape'){sign.classList.remove('open');paused=false;}if(e.key==='Enter'){e.preventDefault();signEmail.focus();}});
 signEmail.addEventListener('keydown',e=>{if(e.key==='Escape'){sign.classList.remove('open');paused=false;}if(e.key==='Enter'){e.preventDefault();submitSign();}});
+signName.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();signEmail.focus();}});
+const keepBtn=document.getElementById('sign-keep');if(keepBtn)keepBtn.addEventListener('click',e=>{e.stopPropagation();submitSign();});
 applyQuiet();
 const saved=localStorage.getItem('willwi-name');if(saved)showTag(saved);
 function drawAim(){if(!aim||!physics)return;const dx=aim.x-aim.cx,dy=aim.y-aim.cy;const d=Math.hypot(dx,dy)||1;const x2=aim.cx+dx/d*Math.min(innerWidth,520);const y2=aim.cy+dy/d*Math.min(innerHeight,520);ctx.beginPath();ctx.moveTo(aim.cx,aim.cy);ctx.lineTo(x2,y2);ctx.strokeStyle='rgba(212,175,55,.55)';ctx.lineWidth=1;ctx.setLineDash([6,8]);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(aim.cx,aim.cy,3,0,Math.PI*2);ctx.fillStyle='rgba(212,175,55,.8)';ctx.fill();}
 function loop(){if(!paused){drawParticles();harvest();drawAim();}stepPhysics();requestAnimationFrame(loop);}loop();
 let overturePlayed=false;
 function playOverture(){if(overturePlayed)return;overturePlayed=true;const ov=document.getElementById('overture');if(!ov)return;ov.classList.add('on');setTimeout(()=>{ov.classList.add('off');particles.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:3.1,gold:true,mine:true});setTimeout(()=>ov.remove(),1200);},3000);}
-window.addEventListener('pointerdown',function start(e){playMode();if(!e.target.closest('button,a,.layer,#sign,#halo-dot,#note-dot,#quiet-dot,#share-line'))playOverture();});
+let soundArmed=false;
+function unlockSound(e){if(!soundArmed){soundArmed=true;playMode();}else if(echoes&&echoes.paused&&!quiet&&!physics)playSafe(echoes);else if(physics&&dawn&&dawn.paused&&!quiet)playSafe(dawn);if(e&&!e.target.closest('button,a,.layer,#sign,#halo-dot,#note-dot,#quiet-dot,#share-line'))playOverture();}
+window.addEventListener('pointerdown',unlockSound,{passive:true});
 document.addEventListener('pointerdown',e=>{if(sign.classList.contains('open')&&!e.target.closest('#sign,.sign-box,#note-dot')){sign.classList.remove('open');paused=false;}});
 document.querySelectorAll('a[href^="#layer-"]').forEach(link=>{link.addEventListener('click',e=>{if(physics)return;e.preventDefault();document.querySelector(link.getAttribute('href'))?.classList.add('open');});});
 document.querySelectorAll('.layer,.layer-close').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el||el.classList.contains('layer-close'))document.querySelectorAll('.layer').forEach(l=>l.classList.remove('open'));});});
